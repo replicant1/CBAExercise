@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.data
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.data
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -15,7 +15,7 @@ data class XAccountActivitySummary(
 ) {
 
     companion object {
-        fun parse(jsonString: String) : XAccountActivitySummary {
+        fun parse(jsonString: String): XAccountActivitySummary {
             return Gson().fromJson(jsonString, XAccountActivitySummary::class.java)
         }
     }

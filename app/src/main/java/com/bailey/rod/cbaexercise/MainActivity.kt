@@ -3,7 +3,7 @@ package com.bailey.rod.cbaexercise
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.gson.Gson
+import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import java.io.BufferedReader
 import java.io.IOException
 
