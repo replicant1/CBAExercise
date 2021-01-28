@@ -19,6 +19,5 @@ data class XAccountTransaction(
     @SerializedName("atmId")
     val atmId: String?,
 
-    @SerializedName("pending")
-    val pending: Boolean = false
+    var pending: Boolean = false
 ) {}
