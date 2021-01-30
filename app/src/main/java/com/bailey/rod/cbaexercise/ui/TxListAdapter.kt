@@ -4,6 +4,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bailey.rod.cbaexercise.R
@@ -34,7 +35,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         var accountNameTextView : TextView = root.findViewById(R.id.tv_account_name)
         var accountNumberTextView : TextView = root.findViewById(R.id.tv_account_number)
         var availableFundsTextView : TextView = root.findViewById(R.id.tv_available_funds_value)
-        var accountBalance : TextView = root.findViewById(R.id.tv_account_balance_value)
+        var accountBalanceTextView : TextView = root.findViewById(R.id.tv_account_balance_value)
     }
 
     data class TxDateHeadingViewHolder(val root: View) : TxViewHolder(root) {
@@ -45,6 +46,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
     data class TxTransactionViewHolder(val root: View) : TxViewHolder(root) {
         var txDetailsTextView : TextView = root.findViewById(R.id.tv_tx_details)
         var txAmountTextView : TextView = root.findViewById(R.id.tv_tx_amount)
+        var txAtmImageView : ImageView = root.findViewById(R.id.iv_tx_atm)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TxViewHolder {
@@ -78,19 +80,14 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             holder.accountNameTextView.text = accountSummary.account?.accountName
             holder.accountNumberTextView.text = accountSummary.account?.accountNumber
             holder.availableFundsTextView.text = getCurrencyAmountAsString(accountSummary.account?.available)
-            holder.accountBalance.text = getCurrencyAmountAsString(accountSummary.account?.balance)
+            holder.accountBalanceTextView.text = getCurrencyAmountAsString(accountSummary.account?.balance)
         } else if (holder is TxTransactionViewHolder){
             val tx = sortedTx[position - 1] // -1 allows for account header in list
             val htmlDetails = if (tx.pending) "<b>PENDING:</b> ${tx.description}" else tx.description
             holder.txDetailsTextView.text = Html.fromHtml(htmlDetails)
             holder.txAmountTextView.text = getCurrencyAmountAsString(tx.amount)
+            holder.txAtmImageView.visibility = if (tx.atmId == null) View.GONE else View.VISIBLE
         }
-//        if (!sortedTx.isNullOrEmpty()) {
-//            val tx = sortedTx[position]
-//            println("At position $position, tx=$tx")
-//            holder.textView1.text = if (tx.pending) "Pending ${tx.effectiveDate}" else tx.effectiveDate
-//            holder.textView2.text = tx.description + " $" + tx.amount
-//        }
     }
 
     override fun getItemCount(): Int {
@@ -106,9 +103,13 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
     }
 
     private fun getCurrencyAmountAsString(dollars: Float?) : String {
-        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.ENGLISH)
         format.currency = Currency.getInstance("AUD")
-        return format.format(dollars)
+        println("currencyCode = ${format.currency.currencyCode}")
+        println("displayName = ${format.currency.displayName}")
+        println("symbol = ${format.currency.symbol}")
+        // TODO: Find a non-hack way to get $ amounts with the "$A" prefix
+        return format.format(dollars).replace("A", "", true)
     }
 
     private fun sortPendingAndNonPendingTxDateDescending(): List<XAccountTransaction> {

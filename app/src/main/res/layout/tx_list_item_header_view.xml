@@ -87,7 +87,7 @@
                 android:textColor="#8a8a8a"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
                 app:layout_constraintTop_toBottomOf="@+id/iv_account_tx"
-                tools:text="Available funds" />
+                android:text="Available funds" />
 
             <!-- "Account balance" amount in $ -->
 
@@ -116,7 +116,7 @@
                 android:paddingBottom="4dp"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
                 app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label"
-                tools:text="Account balance" />
+                android:text="Account balance" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

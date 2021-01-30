@@ -8,22 +8,41 @@
     android:paddingHorizontal="8dp"
     android:paddingVertical="16dp">
 
+    <!-- ATM icon only appears for transactions conducted at an ATM -->
+
+    <ImageView
+        android:id="@+id/iv_tx_atm"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="ATM icon"
+        android:paddingEnd="8dp"
+        android:src="@drawable/marker_atm_commbank"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Textual description of the transaction -->
+
     <TextView
         android:id="@+id/tv_tx_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/iv_tx_atm"
         app:layout_constraintRight_toLeftOf="@+id/tv_tx_amount"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Twas brillig and the slithy tove did gyre and gymble in the wabe." />
+
+    <!-- Dollar amount of the transaction -->
 
     <TextView
         android:id="@id/tv_tx_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
