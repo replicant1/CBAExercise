@@ -3,6 +3,7 @@ package com.bailey.rod.cbaexercise
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
@@ -20,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         val txListView : RecyclerView  = findViewById(R.id.rv_tx_list)
         txListView.layoutManager = LinearLayoutManager(this)
         txListView.adapter = TxListAdapter(accountSummary)
+
+        val decor = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        txListView.addItemDecoration(decor)
     }
 
     private fun parseJson() : XAccountActivitySummary {

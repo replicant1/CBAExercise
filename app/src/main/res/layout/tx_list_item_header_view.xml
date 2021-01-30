@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#649898"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#649898"
+    android:padding="16dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,10 +22,12 @@
                 android:id="@+id/iv_account_tx"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Account Icon"
                 android:src="@drawable/icon_transactional"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:contentDescription="Account Icon" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Account name -->
 
@@ -34,10 +36,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                tools:text="Complete Access"/>
+                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Complete Access" />
 
             <!-- Account number -->
 
@@ -45,13 +48,31 @@
                 android:id="@+id/tv_account_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/tv_account_name"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
                 android:layout_marginStart="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="#8a8a8a"
                 android:textStyle="bold"
-                tools:text="062005 1079 5866"/>
+                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                app:layout_constraintTop_toBottomOf="@+id/tv_account_name"
+                tools:text="062005 1079 5866" />
+
+            <!-- "Available funds" amount in $ -->
+
+            <TextView
+                android:id="@+id/tv_available_funds_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#f6f6f6"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_available_funds_label"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="$372.10" />
 
             <!-- "Available funds" label -->
 
@@ -59,49 +80,44 @@
                 android:id="@+id/tv_available_funds_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/iv_account_tx"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
                 android:background="#f6f6f6"
-                android:textColor="#8a8a8a"
+                android:paddingTop="4dp"
+                android:layout_marginTop="6dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="Available funds"/>
-
-            <!-- "Available funds" amount in $ -->
-
-            <TextView
-                android:id="@+id/tv_available_funds_value"
-                android:layout_width="0dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_available_funds_label"
-                tools:text="$372.10"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:background="#f6f6f6"
-                android:layout_marginRight="16dp"
-                android:layout_height="wrap_content"/>
-
-            <!-- "Account balance" label -->
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_account_balance_label"
-                tools:text="Account balance"
+                android:textColor="#8a8a8a"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label"
-                android:background="#f6f6f6"/>
+                app:layout_constraintTop_toBottomOf="@+id/iv_account_tx"
+                tools:text="Available funds" />
 
             <!-- "Account balance" amount in $ -->
 
             <TextView
+                android:id="@+id/tv_account_balance_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_account_balance_value"
-                tools:text="$372.10"
                 android:background="#f6f6f6"
-                app:layout_constraintRight_toRightOf="parent"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:textAlignment="textEnd"
+                android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_account_balance_label"
-                android:layout_marginRight="16dp"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="$372.10" />
+
+            <!-- "Account balance" label -->
+
+            <TextView
+                android:id="@+id/tv_account_balance_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#f6f6f6"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label"
+                tools:text="Account balance" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
