@@ -1,7 +1,7 @@
 package com.bailey.rod.cbaexercise
 
+import android.app.Activity
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,14 +11,15 @@ import com.bailey.rod.cbaexercise.ui.TxListAdapter
 import java.io.BufferedReader
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        title = "Account details"
 
         val accountSummary = parseJson()
-        val txListView : RecyclerView  = findViewById(R.id.rv_tx_list)
+        val txListView: RecyclerView = findViewById(R.id.rv_tx_list)
         txListView.layoutManager = LinearLayoutManager(this)
         txListView.adapter = TxListAdapter(accountSummary)
 
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         txListView.addItemDecoration(decor)
     }
 
-    private fun parseJson() : XAccountActivitySummary {
+    private fun parseJson(): XAccountActivitySummary {
         val jsonString = applicationContext.assetFileAsString("sample_account_data.json")
         println("jsonString=$jsonString")
         val summary = XAccountActivitySummary.parse(jsonString)
