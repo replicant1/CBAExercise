@@ -18,35 +18,45 @@ import java.util.*
 class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
     RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
 
-    /**
-     * Includes both pending and non-pending transactions sorted into reverse order
-     * by 'effectiveDate'.
-     */
-    private val sortedTx: List<XAccountTransaction>
+    private val listItemModels: List<TxListItemModel> = createListItemModels()
 
-    init {
-        sortedTx = sortPendingAndNonPendingTxDateDescending()
-    }
+    interface TxListItemModel
 
-    open class TxViewHolder(root: View) : RecyclerView.ViewHolder(root) {
-    }
+    data class TxAccountHeadingListItemModel(
+        val accountName: String?,
+        val accountNumber: String?,
+        val availableFunds: Float?,
+        val accountBalance: Float?
+    ) : TxListItemModel
+
+    data class TxDateHeadingListItemModel(val date: String?, val daysAgo: Int?) : TxListItemModel
+
+    data class TxTransactionListItemModel(
+        val effectiveDate: String?,
+        val description: String?,
+        val amount: Float?,
+        val isAtm: Boolean?,
+        val isPending: Boolean
+    ) : TxListItemModel
+
+    open class TxViewHolder(root: View) : RecyclerView.ViewHolder(root)
 
     data class TxAccountHeadingViewHolder(val root: View) : TxViewHolder(root) {
-        var accountNameTextView : TextView = root.findViewById(R.id.tv_account_name)
-        var accountNumberTextView : TextView = root.findViewById(R.id.tv_account_number)
-        var availableFundsTextView : TextView = root.findViewById(R.id.tv_available_funds_value)
-        var accountBalanceTextView : TextView = root.findViewById(R.id.tv_account_balance_value)
+        var accountNameTextView: TextView = root.findViewById(R.id.tv_account_name)
+        var accountNumberTextView: TextView = root.findViewById(R.id.tv_account_number)
+        var availableFundsTextView: TextView = root.findViewById(R.id.tv_available_funds_value)
+        var accountBalanceTextView: TextView = root.findViewById(R.id.tv_account_balance_value)
     }
 
     data class TxDateHeadingViewHolder(val root: View) : TxViewHolder(root) {
-        var txDateTextView : TextView = root.findViewById(R.id.tv_tx_date)
-        var txAgeTextView : TextView = root.findViewById(R.id.tv_tx_age)
+        var txDateTextView: TextView = root.findViewById(R.id.tv_tx_date)
+        var txAgeTextView: TextView = root.findViewById(R.id.tv_tx_age)
     }
 
     data class TxTransactionViewHolder(val root: View) : TxViewHolder(root) {
-        var txDetailsTextView : TextView = root.findViewById(R.id.tv_tx_details)
-        var txAmountTextView : TextView = root.findViewById(R.id.tv_tx_amount)
-        var txAtmImageView : ImageView = root.findViewById(R.id.iv_tx_atm)
+        var txDetailsTextView: TextView = root.findViewById(R.id.tv_tx_details)
+        var txAmountTextView: TextView = root.findViewById(R.id.tv_tx_amount)
+        var txAtmImageView: ImageView = root.findViewById(R.id.iv_tx_atm)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TxViewHolder {
@@ -65,64 +75,123 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                     )
                 )
             }
-            else -> {
-                return TxAccountHeadingViewHolder(
+            VIEW_TYPE_TX_DATE_HEADING -> {
+                return TxDateHeadingViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.tx_list_item_date_view, parent, false
                     )
                 )
             }
+            else -> {
+                throw IllegalArgumentException("Unexpected view type $viewType")
+            }
         }
     }
 
     override fun onBindViewHolder(holder: TxViewHolder, position: Int) {
-        if (holder is TxAccountHeadingViewHolder) {
-            holder.accountNameTextView.text = accountSummary.account?.accountName
-            holder.accountNumberTextView.text = accountSummary.account?.accountNumber
-            holder.availableFundsTextView.text = getCurrencyAmountAsString(accountSummary.account?.available)
-            holder.accountBalanceTextView.text = getCurrencyAmountAsString(accountSummary.account?.balance)
-        } else if (holder is TxTransactionViewHolder){
-            val tx = sortedTx[position - 1] // -1 allows for account header in list
-            val htmlDetails = if (tx.pending) "<b>PENDING:</b> ${tx.description}" else tx.description
-            holder.txDetailsTextView.text = Html.fromHtml(htmlDetails)
-            holder.txAmountTextView.text = getCurrencyAmountAsString(tx.amount)
-            holder.txAtmImageView.visibility = if (tx.atmId == null) View.GONE else View.VISIBLE
+        when (holder) {
+            is TxAccountHeadingViewHolder -> {
+                val model: TxAccountHeadingListItemModel =
+                    listItemModels[position] as TxAccountHeadingListItemModel
+                holder.accountNameTextView.text = model.accountName
+                holder.accountNumberTextView.text = model.accountNumber
+                holder.availableFundsTextView.text = getDollarString(model.availableFunds)
+                holder.accountBalanceTextView.text = getDollarString(model.accountBalance)
+            }
+            is TxTransactionViewHolder -> {
+                val model: TxTransactionListItemModel =
+                    listItemModels[position] as TxTransactionListItemModel
+                holder.txDetailsTextView.text = Html.fromHtml(
+                    if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description
+                )
+                holder.txAmountTextView.text = getDollarString(model.amount)
+                holder.txAtmImageView.visibility =
+                    if (model.isAtm == true) View.VISIBLE else View.GONE
+            }
+            is TxDateHeadingViewHolder -> {
+                val model: TxDateHeadingListItemModel =
+                    listItemModels[position] as TxDateHeadingListItemModel
+                holder.txDateTextView.text = model.date
+                holder.txAgeTextView.text = String.format("X days ago")
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return (sortedTx.size + 1) // +1 = account heading
+        return listItemModels.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) {
-            return VIEW_TYPE_ACCOUNT_HEADING
-        } else {
-            return VIEW_TYPE_TX
+        return when (listItemModels[position]) {
+            is TxAccountHeadingListItemModel -> VIEW_TYPE_ACCOUNT_HEADING
+            is TxDateHeadingListItemModel -> VIEW_TYPE_TX_DATE_HEADING
+            is TxTransactionListItemModel -> VIEW_TYPE_TX
+            else -> -1
         }
     }
 
-    private fun getCurrencyAmountAsString(dollars: Float?) : String {
+    private fun getDollarString(dollars: Float?): String {
         val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.ENGLISH)
         format.currency = Currency.getInstance("AUD")
-        println("currencyCode = ${format.currency.currencyCode}")
-        println("displayName = ${format.currency.displayName}")
-        println("symbol = ${format.currency.symbol}")
-        // TODO: Find a non-hack way to get $ amounts with the "$A" prefix
         return format.format(dollars).replace("A", "", true)
     }
 
-    private fun sortPendingAndNonPendingTxDateDescending(): List<XAccountTransaction> {
-        val dateTimeFormatter : DateTimeFormatter = DateTimeFormatter.ofPattern("d/MM/yyyy")
-        val pendingAndNonPendingTx = (accountSummary.transactions ?: emptyList()) + (accountSummary.pendingTransactions ?: emptyList())
-        return pendingAndNonPendingTx.sortedByDescending {
-            LocalDate.parse(it.effectiveDate, dateTimeFormatter)
+    /**
+     * @return List of model objects, one per list item, in the order they will appear in the tx list.
+     * Pending and non-pending tx's both appear in the list. Sorted order is date descending. First item
+     * is always an instance of TxAccountHeadingListItemModel. Following items are TxDateHeadingListItemModel
+     * and TxTransactionListItemModel
+     */
+    private fun createListItemModels(): List<TxListItemModel> {
+        // Put all tx into sorted list by date
+        val pendingAndNonPendingTx =
+            (accountSummary.transactions ?: emptyList()) + (accountSummary.pendingTransactions
+                ?: emptyList())
+        val sortedTx: List<XAccountTransaction> = pendingAndNonPendingTx.sortedByDescending {
+            LocalDate.parse(it.effectiveDate, DATE_TIME_INPUT_FORMATTER)
         }
+
+        val result = mutableListOf<TxListItemModel>()
+
+        // First item is account heading list item
+        result.add(
+            TxAccountHeadingListItemModel(
+                accountSummary.account?.accountName,
+                accountSummary.account?.accountNumber,
+                accountSummary.account?.available,
+                accountSummary.account?.balance
+            )
+        )
+
+        // Transactions sorted by descending date, with date headings separating distinct dates
+        var currentDate: LocalDate? = null
+        val nowDate = LocalDate.now()
+        for ((i, tx) in sortedTx.withIndex()) {
+            val txDate = LocalDate.parse(tx.effectiveDate, DATE_TIME_INPUT_FORMATTER)
+            if (i == 0 || !txDate.isEqual(currentDate)) {
+                // TODO: Calculate "days ago"
+                result.add(TxDateHeadingListItemModel(DATE_TIME_OUTPUT_FORMATTER.format(txDate), 0))
+                currentDate = txDate
+            }
+            result.add(
+                TxTransactionListItemModel(
+                    tx.effectiveDate,
+                    tx.description,
+                    tx.amount,
+                    tx.atmId != null,
+                    tx.pending
+                )
+            )
+        }
+        return result
     }
 
     companion object {
         const val VIEW_TYPE_ACCOUNT_HEADING = 0
         const val VIEW_TYPE_TX_DATE_HEADING = 1
         const val VIEW_TYPE_TX = 2
+
+        val DATE_TIME_OUTPUT_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+        val DATE_TIME_INPUT_FORMATTER : DateTimeFormatter = DateTimeFormatter.ofPattern("d/MM/yyyy")
     }
 }
