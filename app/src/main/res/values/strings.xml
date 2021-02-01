@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CBA Exercise</string>
+    <string name="activity_title_account_details">Account details</string>
 </resources>

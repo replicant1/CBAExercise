@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
-import java.text.NumberFormat
+import com.bailey.rod.cbaexercise.getDollarString
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
     RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
@@ -95,16 +94,17 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                     listItemModels[position] as TxAccountHeadingListItemModel
                 holder.accountNameTextView.text = model.accountName
                 holder.accountNumberTextView.text = model.accountNumber
-                holder.availableFundsTextView.text = getDollarString(model.availableFunds)
-                holder.accountBalanceTextView.text = getDollarString(model.accountBalance)
+                holder.availableFundsTextView.text = model.availableFunds?.getDollarString()
+                holder.accountBalanceTextView.text = model.accountBalance?.getDollarString()
             }
             is TxTransactionViewHolder -> {
                 val model: TxTransactionListItemModel =
                     listItemModels[position] as TxTransactionListItemModel
                 holder.txDetailsTextView.text = Html.fromHtml(
-                    if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description
+                    if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description,
+                    Html.FROM_HTML_MODE_LEGACY
                 )
-                holder.txAmountTextView.text = getDollarString(model.amount)
+                holder.txAmountTextView.text = model.amount?.getDollarString()
                 holder.txAtmImageView.visibility =
                     if (model.isAtm == true) View.VISIBLE else View.GONE
             }
@@ -112,7 +112,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                 val model: TxDateHeadingListItemModel =
                     listItemModels[position] as TxDateHeadingListItemModel
                 holder.txDateTextView.text = model.date
-                holder.txAgeTextView.text = String.format("X days ago")
+                holder.txAgeTextView.text = model.daysAgo
             }
         }
     }
@@ -130,11 +130,11 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         }
     }
 
-    private fun getDollarString(dollars: Float?): String {
-        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.ENGLISH)
-        format.currency = Currency.getInstance("AUD")
-        return format.format(dollars).replace("A", "", true)
-    }
+//    private fun getDollarString(dollars: Float?): String {
+//        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.ENGLISH)
+//        format.currency = Currency.getInstance("AUD")
+//        return format.format(dollars).replace("A", "", true)
+//    }
 
     /**
      * @return List of model objects, one per list item, in the order they will appear in the tx list.
@@ -168,8 +168,12 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         for ((i, tx) in sortedTx.withIndex()) {
             val txDate = LocalDate.parse(tx.effectiveDate, DATE_TIME_INPUT_FORMATTER)
             if (i == 0 || !txDate.isEqual(currentDate)) {
-                result.add(TxDateHeadingListItemModel(DATE_TIME_OUTPUT_FORMATTER.format(txDate),
-                    LocalDate.now().daysAgoLabel(txDate)))
+                result.add(
+                    TxDateHeadingListItemModel(
+                        DATE_TIME_OUTPUT_FORMATTER.format(txDate),
+                        LocalDate.now().daysAgoLabel(txDate)
+                    )
+                )
                 currentDate = txDate
             }
             result.add(
@@ -190,7 +194,8 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         const val VIEW_TYPE_TX_DATE_HEADING = 1
         const val VIEW_TYPE_TX = 2
 
-        val DATE_TIME_OUTPUT_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-        val DATE_TIME_INPUT_FORMATTER : DateTimeFormatter = DateTimeFormatter.ofPattern("d/MM/yyyy")
+        val DATE_TIME_OUTPUT_FORMATTER: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("dd MMM yyyy")
+        val DATE_TIME_INPUT_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("d/MM/yyyy")
     }
 }
