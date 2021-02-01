@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#649898"
+    android:background="@color/cba_account_header_bg"
     android:padding="16dp">
 
     <androidx.cardview.widget.CardView
@@ -24,7 +24,7 @@
                 android:layout_height="56dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:contentDescription="Account Icon"
+                android:contentDescription="@string/tx_list_account_icon"
                 android:src="@drawable/icon_transactional"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="#8a8a8a"
+                android:textColor="@color/cba_deemphasised_text"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
                 app:layout_constraintTop_toBottomOf="@+id/tv_account_name"
@@ -62,12 +62,12 @@
                 android:id="@+id/fl_bottom_panel"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toBottomOf="@+id/iv_account_tx"
+                android:layout_marginTop="8dp"
+                android:background="@color/cba_list_item_bg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="8dp"
-                android:background="#F6F6F6"/>
+                app:layout_constraintTop_toBottomOf="@+id/iv_account_tx" />
 
             <!-- "Available funds" label -->
 
@@ -76,11 +76,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:text="@string/tx_list_available_funds"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="#8a8a8a"
+                android:textColor="@color/cba_deemphasised_text"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toTopOf="@+id/fl_bottom_panel"
-                android:text="Available funds" />
+                app:layout_constraintTop_toTopOf="@+id/fl_bottom_panel" />
 
             <!-- "Available funds" amount in $ -->
 
@@ -105,10 +105,10 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
+                android:text="@string/tx_list_account_balance"
+                android:textColor="@color/cba_deemphasised_text"
                 app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label"
-                android:textColor="#8a8a8a"
-                android:text="Account balance" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label" />
 
             <!-- "Account balance" amount in $ -->
 
@@ -119,13 +119,11 @@
                 android:paddingEnd="8dp"
                 android:paddingBottom="4dp"
                 android:textAlignment="textEnd"
+                android:textColor="@color/cba_deemphasised_text"
                 android:textStyle="bold"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_account_balance_label"
                 app:layout_constraintRight_toRightOf="parent"
-                android:textColor="#8a8a8a"
                 tools:text="$372.10" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

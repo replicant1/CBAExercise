@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffcc00"
+    android:background="@color/cba_date_header_bg"
     android:padding="8dp">
 
     <!-- Date of transactions in this section eg. "02 JAN 2014" -->
@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif"
         android:textAlignment="textStart"
         android:textAllCaps="true"
-        android:textColor="@color/black"
+        android:textColor="@color/cba_normal_text"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
+        android:textColor="@color/cba_normal_text"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
