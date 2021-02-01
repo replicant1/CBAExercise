@@ -29,7 +29,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         val accountBalance: Float?
     ) : TxListItemModel
 
-    data class TxDateHeadingListItemModel(val date: String?, val daysAgo: Int?) : TxListItemModel
+    data class TxDateHeadingListItemModel(val date: String?, val daysAgo: String?) : TxListItemModel
 
     data class TxTransactionListItemModel(
         val effectiveDate: String?,
@@ -165,12 +165,11 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
 
         // Transactions sorted by descending date, with date headings separating distinct dates
         var currentDate: LocalDate? = null
-        val nowDate = LocalDate.now()
         for ((i, tx) in sortedTx.withIndex()) {
             val txDate = LocalDate.parse(tx.effectiveDate, DATE_TIME_INPUT_FORMATTER)
             if (i == 0 || !txDate.isEqual(currentDate)) {
-                // TODO: Calculate "days ago"
-                result.add(TxDateHeadingListItemModel(DATE_TIME_OUTPUT_FORMATTER.format(txDate), 0))
+                result.add(TxDateHeadingListItemModel(DATE_TIME_OUTPUT_FORMATTER.format(txDate),
+                    LocalDate.now().daysAgoStr(txDate)))
                 currentDate = txDate
             }
             result.add(
