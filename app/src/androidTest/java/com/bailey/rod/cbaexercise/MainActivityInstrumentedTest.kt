@@ -1,18 +1,12 @@
 package com.bailey.rod.cbaexercise
 
-import androidx.test.espresso.DataInteraction
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.hasEntry
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -46,8 +40,16 @@ class MainActivityInstrumentedTest {
     }
 
     @Test
-    fun secondRowIsCorrectDateHeader() {
-        onView(withText("20 JUL 2017")).check(matches(isDisplayed()))
+    fun secondRowContainsFirstDateHeader() {
+        onView(withId(R.id.rv_tx_list)).check(
+            matches(
+                Utils.atPosition(
+                    1,
+                    hasDescendant(withText("20 JUL 2017"))
+                )
+            )
+        )
     }
+
 
 }
