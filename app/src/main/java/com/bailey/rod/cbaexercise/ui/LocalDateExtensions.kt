@@ -9,7 +9,7 @@ fun LocalDate.daysAgo(oldDate: LocalDate): Long {
     return thisEpochDay - oldEpochDay
 }
 
-fun LocalDate.daysAgoStr(oldDate: LocalDate): String {
+fun LocalDate.daysAgoLabel(oldDate: LocalDate): String {
     val daysAgo = this.daysAgo(oldDate)
     if (daysAgo == 0L) {
         return "Today"

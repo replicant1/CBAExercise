@@ -169,7 +169,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             val txDate = LocalDate.parse(tx.effectiveDate, DATE_TIME_INPUT_FORMATTER)
             if (i == 0 || !txDate.isEqual(currentDate)) {
                 result.add(TxDateHeadingListItemModel(DATE_TIME_OUTPUT_FORMATTER.format(txDate),
-                    LocalDate.now().daysAgoStr(txDate)))
+                    LocalDate.now().daysAgoLabel(txDate)))
                 currentDate = txDate
             }
             result.add(
