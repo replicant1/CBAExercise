@@ -2,11 +2,15 @@ package com.bailey.rod.cbaexercise
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.bailey.rod.cbaexercise.ui.TxListAdapter
+import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.startsWith
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -51,5 +55,63 @@ class MainActivityInstrumentedTest {
         )
     }
 
+    @Test
+    fun thirdAndFourthRowsContainTxs() {
+        onView(withId(R.id.rv_tx_list)).check(
+            (matches(
+                Utils.atPosition(
+                    2,
+                    hasDescendant(withText(startsWith(("Kaching"))))
+                )
+            ))
+        )
+        onView(withId(R.id.rv_tx_list)).check(
+            (matches(
+                Utils.atPosition(
+                    3,
+                    hasDescendant(withText(startsWith("Wdl ATM CBA")))
+                )
+            ))
+        )
+    }
+
+    @Test
+    fun fifthRowContainsSecondDateHeader() {
+        onView(withId(R.id.rv_tx_list)).check(
+            matches(
+                Utils.atPosition(
+                    4,
+                    hasDescendant(withText("19 JUL 2017"))
+                )
+            )
+        )
+    }
+
+    /**
+     * Second last row in the list should be the given date header. Requires scrolling down.
+     */
+    @Test
+    fun secondLastRowContainsLastDateHeader() {
+        onView(withId(R.id.rv_tx_list))
+            .check(matches(isDisplayed())).perform(
+                RecyclerViewActions.scrollTo<TxListAdapter.TxViewHolder>(
+                    hasDescendant(withText("17 MAY 2017"))
+                )
+            )
+    }
+
+    /**
+     * Check last tx in list. Requires scrolling down. Only look at tx amount - matching against tx
+     * description not working, probably due to HTML usage.
+     */
+    @Test
+    fun lastRowContainsPendingTx() {
+        onView(withId(R.id.rv_tx_list))
+            .check(matches(isDisplayed())).perform(
+                RecyclerViewActions.scrollTo<TxListAdapter.TxViewHolder>(
+                    hasDescendant(withText(containsString("$-8.00")))
+                )
+            )
+    }
 
 }
