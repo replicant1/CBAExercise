@@ -2,20 +2,40 @@ package com.bailey.rod.cbaexercise
 
 import android.app.Activity
 import android.os.Bundle
+import com.bailey.rod.cbaexercise.data.XAtm
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 
 class MapsActivity : Activity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
+    private lateinit var mAtm : XAtm
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
+        val atmData = intent.getStringExtra(ARG_ATM)
+
+        println("************************")
+        println("atmData = $atmData")
+        println("************************")
+
+        try {
+            mAtm = Gson().fromJson(atmData, XAtm::class.java)
+            println("mAtm = $mAtm")
+        } catch (ex : JsonSyntaxException) {
+            println(ex)
+        }
+
+
         // Obtain the MapFragment and get notified when the map is ready to be used.
         val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
@@ -34,8 +54,22 @@ class MapsActivity : Activity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        if (mAtm.location != null) {
+            val atmLocation = mAtm.location
+            if ((atmLocation?.lat != null) && (atmLocation.lng != null)) {
+                val markerLatLng = LatLng(atmLocation.lat.toDouble(), atmLocation.lng.toDouble())
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(markerLatLng)
+                        .title(mAtm.name)
+                        .snippet(mAtm.address))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, MAP_INITIAL_ZOOM))
+            }
+        }
+    }
+
+    companion object {
+        const val ARG_ATM = "com.bailey.rod.cbaexercise.atm"
+        const val MAP_INITIAL_ZOOM = 16F
     }
 }

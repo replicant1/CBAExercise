@@ -13,6 +13,7 @@ import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
 import com.bailey.rod.cbaexercise.getDollarString
+import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -37,7 +38,8 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         val description: String?,
         val amount: Float?,
         val isAtm: Boolean?,
-        val isPending: Boolean
+        val isPending: Boolean,
+        val atmId: String?
     ) : TxListItemModel
 
     open class TxViewHolder(root: View) : RecyclerView.ViewHolder(root)
@@ -112,8 +114,14 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                 if (model.isAtm == true) {
                     holder.txAtmImageView.visibility = View.VISIBLE
                     holder.root.setOnClickListener() {
-                        val intent = Intent(holder.root.context, MapsActivity::class.java)
-                        holder.root.context.startActivity(intent)
+                        if (model.atmId != null) {
+                            val atmData = findAtmById(model.atmId)
+                            if (atmData != null) {
+                                val intent = Intent(holder.root.context, MapsActivity::class.java)
+                                intent.putExtra(MapsActivity.ARG_ATM, atmData)
+                                holder.root.context.startActivity(intent)
+                            }
+                        }
                     }
                 } else {
                     holder.txAtmImageView.visibility = View.GONE
@@ -141,6 +149,17 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             is TxTransactionListItemModel -> VIEW_TYPE_TX
             else -> -1
         }
+    }
+
+    private fun findAtmById(atmId: String?): String? {
+        if (atmId != null) {
+            for (atm in accountSummary.atms ?: emptyList()) {
+                if (atm.id.equals(atmId)) {
+                    return Gson().toJson(atm)
+                }
+            }
+        }
+        return null
     }
 
     /**
@@ -189,7 +208,8 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                     tx.description,
                     tx.amount,
                     tx.atmId != null,
-                    tx.pending
+                    tx.pending,
+                    tx.atmId
                 )
             )
         }
