@@ -7,6 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
@@ -62,7 +63,8 @@ class MapsActivity : Activity(), OnMapReadyCallback {
                     MarkerOptions()
                         .position(markerLatLng)
                         .title(mAtm.name)
-                        .snippet(mAtm.address))
+                        .snippet(mAtm.address)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_atm_commbank)))
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, MAP_INITIAL_ZOOM))
             }
         }
