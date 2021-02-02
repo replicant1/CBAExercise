@@ -1,6 +1,4 @@
-==========================
-Practical exercise
-==========================
+# Practical exercise
 
 Create an Android application which has the following:
 
