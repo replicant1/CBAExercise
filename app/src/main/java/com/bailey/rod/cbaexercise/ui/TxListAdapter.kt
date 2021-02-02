@@ -1,5 +1,6 @@
 package com.bailey.rod.cbaexercise.ui
 
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bailey.rod.cbaexercise.MapsActivity
 import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
@@ -96,6 +98,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                 holder.accountNumberTextView.text = model.accountNumber
                 holder.availableFundsTextView.text = model.availableFunds?.getDollarString()
                 holder.accountBalanceTextView.text = model.accountBalance?.getDollarString()
+                holder.root.setOnClickListener(null)
             }
             is TxTransactionViewHolder -> {
                 val model: TxTransactionListItemModel =
@@ -105,14 +108,24 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                     Html.FROM_HTML_MODE_LEGACY
                 )
                 holder.txAmountTextView.text = model.amount?.getDollarString()
-                holder.txAtmImageView.visibility =
-                    if (model.isAtm == true) View.VISIBLE else View.GONE
+
+                if (model.isAtm == true) {
+                    holder.txAtmImageView.visibility = View.VISIBLE
+                    holder.root.setOnClickListener() {
+                        val intent = Intent(holder.root.context, MapsActivity::class.java)
+                        holder.root.context.startActivity(intent)
+                    }
+                } else {
+                    holder.txAtmImageView.visibility = View.GONE
+                    holder.root.setOnClickListener(null)
+                }
             }
             is TxDateHeadingViewHolder -> {
                 val model: TxDateHeadingListItemModel =
                     listItemModels[position] as TxDateHeadingListItemModel
                 holder.txDateTextView.text = model.date
                 holder.txAgeTextView.text = model.daysAgo
+                holder.root.setOnClickListener(null)
             }
         }
     }
@@ -129,12 +142,6 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             else -> -1
         }
     }
-
-//    private fun getDollarString(dollars: Float?): String {
-//        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.ENGLISH)
-//        format.currency = Currency.getInstance("AUD")
-//        return format.format(dollars).replace("A", "", true)
-//    }
 
     /**
      * @return List of model objects, one per list item, in the order they will appear in the tx list.

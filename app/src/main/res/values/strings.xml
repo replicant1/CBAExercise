@@ -4,4 +4,5 @@
     <string name="tx_list_account_icon">Account icon</string>
     <string name="tx_list_available_funds">Available funds</string>
     <string name="tx_list_account_balance">Account balance</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
