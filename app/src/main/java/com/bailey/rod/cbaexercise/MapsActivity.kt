@@ -3,6 +3,7 @@ package com.bailey.rod.cbaexercise
 import android.app.Activity
 import android.os.Bundle
 import com.bailey.rod.cbaexercise.data.XAtm
+import com.bailey.rod.cbaexercise.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
@@ -12,49 +13,44 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import timber.log.Timber
 
+/**
+ * Note: having trouble getting view binding going with google maps <fragment>
+ */
 class MapsActivity : Activity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
-    private lateinit var mAtm : XAtm
+    private lateinit var mAtm: XAtm
+
+    private lateinit var binding : ActivityMapsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMapsBinding.inflate(layoutInflater)
+
         setContentView(R.layout.activity_maps)
 
         val atmData = intent.getStringExtra(ARG_ATM)
-
-        println("************************")
-        println("atmData = $atmData")
-        println("************************")
+        Timber.d("atmData = $atmData")
 
         try {
             mAtm = Gson().fromJson(atmData, XAtm::class.java)
-            println("mAtm = $mAtm")
-        } catch (ex : JsonSyntaxException) {
-            println(ex)
+            Timber.d("mAtm = $mAtm")
+        } catch (ex: JsonSyntaxException) {
+            Timber.w(ex)
         }
-
 
         // Obtain the MapFragment and get notified when the map is ready to be used.
         val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in ATM location and move the camera there
         if (mAtm.location != null) {
             val atmLocation = mAtm.location
             if ((atmLocation?.lat != null) && (atmLocation.lng != null)) {
@@ -64,7 +60,8 @@ class MapsActivity : Activity(), OnMapReadyCallback {
                         .position(markerLatLng)
                         .title(mAtm.name)
                         .snippet(mAtm.address)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_atm_commbank)))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_atm_commbank))
+                )
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, MAP_INITIAL_ZOOM))
             }
         }

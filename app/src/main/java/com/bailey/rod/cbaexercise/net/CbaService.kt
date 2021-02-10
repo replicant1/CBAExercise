@@ -17,7 +17,7 @@ interface CbaService {
      * @param fileName The data set to be retrieved
      * @param dl Download - always 1
      */
-    @GET("/s/{account_key}/{file_name}?dl={dl}")
+    @GET("/s/{account_key}/{file_name}")
     fun getAccountActivitySummary(
         @Path("account_key") accountKey: String,
         @Path("file_name") fileName: String,

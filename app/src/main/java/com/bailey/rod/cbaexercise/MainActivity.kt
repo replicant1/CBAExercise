@@ -2,58 +2,84 @@ package com.bailey.rod.cbaexercise
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
+import com.bailey.rod.cbaexercise.databinding.ActivityMainBinding
 import com.bailey.rod.cbaexercise.net.CbaService
 import com.bailey.rod.cbaexercise.net.ServiceBuilder
 import com.bailey.rod.cbaexercise.ui.TxListAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 class MainActivity : Activity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        title = getString(R.string.activity_title_account_details)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
+
+        binding.txSwipeRefresh.setOnRefreshListener { fetchJson() }
+        binding.txSwipeRefresh.isRefreshing = true
 
         fetchJson()
     }
 
+    /**
+     * Async fetch account activity data over network. Publish results to screen, errors to Toast.
+     */
     private fun fetchJson() {
         val request = ServiceBuilder.buildService(CbaService::class.java)
-        val call = request.getAccountActivitySummary(SERVICE_KEY, SERVICE_FILE_NAME, SERVICE_DOWNLOAD_FLAG)
+        val call =
+            request.getAccountActivitySummary(SERVICE_KEY, SERVICE_FILE_NAME, SERVICE_DOWNLOAD_FLAG)
 
         call.enqueue(object : Callback<XAccountActivitySummary> {
             override fun onResponse(
                 call: Call<XAccountActivitySummary>,
                 response: Response<XAccountActivitySummary>
             ) {
+                binding.txSwipeRefresh.isRefreshing = false
+
                 if (response.isSuccessful) {
-                    println("Results from onResponse: $response")
-                    updateUIFromData(response.body())
+                    Timber.d("Response from server: $response")
+                    val summary: XAccountActivitySummary? = response.body()
+                    if (summary != null) {
+                        updateUIFromData(summary)
+                    }
+                } else {
+                    showFailToast()
                 }
             }
 
             override fun onFailure(call: Call<XAccountActivitySummary>, t: Throwable) {
-                println("Failure when loading json over network $t")
+                Timber.w(t, "Failed to load account activity data")
+                binding.txSwipeRefresh.isRefreshing = false
+                showFailToast()
+            }
+
+            private fun showFailToast() {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.fail_account_activity_load),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         })
     }
 
-    private fun updateUIFromData(accountSummary : XAccountActivitySummary?) {
-        if (accountSummary == null)
-            return
-
-        val txListView: RecyclerView = findViewById(R.id.rv_tx_list)
-        txListView.layoutManager = LinearLayoutManager(this)
-        txListView.adapter = TxListAdapter(accountSummary)
-
-        val decor = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        txListView.addItemDecoration(decor)
+    /**
+     * Apply account activity data to RecyclerView
+     */
+    private fun updateUIFromData(accountSummary: XAccountActivitySummary) {
+        binding.rvTxList.layoutManager = LinearLayoutManager(this)
+        binding.rvTxList.adapter = TxListAdapter(accountSummary)
     }
 
     private fun parseJson(): XAccountActivitySummary {

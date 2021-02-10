@@ -4,6 +4,7 @@ buildscript {
     ext.gson_version = "2.6.2"
     ext.retrofit_version = "2.7.0"
     ext.ok_http_version = "4.3.1"
+    ext.swipe_version = "1.0.0"
     repositories {
         google()
         jcenter()

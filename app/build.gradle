@@ -6,12 +6,17 @@ plugins {
 android {
     compileSdkVersion 29
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.bailey.rod.cbaexercise"
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +34,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
@@ -44,6 +50,12 @@ dependencies {
     // Only included to prevent compilation error
     // https://stackoverflow.com/questions/58630667/rejecting-re-init-on-previously-failed-class-in-okhttp/58662077#58662077
     implementation "org.conscrypt:conscrypt-android:2.2.1"
+
+    // Pull-to-refresh UI component
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_version"
+
+    // "Timber" logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'

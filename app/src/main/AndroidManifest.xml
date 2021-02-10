@@ -29,15 +29,20 @@
             android:value="@string/google_maps_key" />
 
 
+        <!-- Account activity summary screen -->
+
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/activity_title_account_details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ATM location screen -->
 
         <activity
             android:name=".MapsActivity"
