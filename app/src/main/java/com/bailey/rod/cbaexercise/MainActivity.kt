@@ -27,6 +27,11 @@ class MainActivity : Activity() {
         binding.txSwipeRefresh.setOnRefreshListener { fetchJson() }
         binding.txSwipeRefresh.isRefreshing = true
 
+        // Initialise "Timber" for logging
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         fetchJson()
     }
 
@@ -37,6 +42,8 @@ class MainActivity : Activity() {
         val request = ServiceBuilder.buildService(CbaService::class.java)
         val call =
             request.getAccountActivitySummary(SERVICE_KEY, SERVICE_FILE_NAME, SERVICE_DOWNLOAD_FLAG)
+
+        Timber.d("Fetching account activity data")
 
         call.enqueue(object : Callback<XAccountActivitySummary> {
             override fun onResponse(

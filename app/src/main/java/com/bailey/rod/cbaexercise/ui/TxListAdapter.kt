@@ -5,13 +5,14 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.bailey.rod.cbaexercise.MapsActivity
-import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
+import com.bailey.rod.cbaexercise.databinding.TxListItemDateViewBinding
+import com.bailey.rod.cbaexercise.databinding.TxListItemHeaderViewBinding
+import com.bailey.rod.cbaexercise.databinding.TxListItemTxViewBinding
 import com.bailey.rod.cbaexercise.getDollarString
 import com.google.gson.Gson
 import java.time.LocalDate
@@ -31,7 +32,9 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         val accountBalance: Float?
     ) : TxListItemModel
 
-    data class TxDateHeadingListItemModel(val date: String?, val daysAgo: String?) : TxListItemModel
+    data class TxDateHeadingListItemModel(
+        val date: String?,
+        val daysAgo: String?) : TxListItemModel
 
     data class TxTransactionListItemModel(
         val effectiveDate: String?,
@@ -42,48 +45,42 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         val atmId: String?
     ) : TxListItemModel
 
-    open class TxViewHolder(root: View) : RecyclerView.ViewHolder(root)
+    open class TxViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
 
-    data class TxAccountHeadingViewHolder(val root: View) : TxViewHolder(root) {
-        var accountNameTextView: TextView = root.findViewById(R.id.tv_account_name)
-        var accountNumberTextView: TextView = root.findViewById(R.id.tv_account_number)
-        var availableFundsTextView: TextView = root.findViewById(R.id.tv_available_funds_value)
-        var accountBalanceTextView: TextView = root.findViewById(R.id.tv_account_balance_value)
-    }
+    inner class TxAccountHeadingViewHolder(val binding: TxListItemHeaderViewBinding) :
+        TxViewHolder(binding)
 
-    data class TxDateHeadingViewHolder(val root: View) : TxViewHolder(root) {
-        var txDateTextView: TextView = root.findViewById(R.id.tv_tx_date)
-        var txAgeTextView: TextView = root.findViewById(R.id.tv_tx_age)
-    }
+    inner class TxDateHeadingViewHolder(val binding: TxListItemDateViewBinding) :
+        TxViewHolder(binding)
 
-    data class TxTransactionViewHolder(val root: View) : TxViewHolder(root) {
-        var txDetailsTextView: TextView = root.findViewById(R.id.tv_tx_details)
-        var txAmountTextView: TextView = root.findViewById(R.id.tv_tx_amount)
-        var txAtmImageView: ImageView = root.findViewById(R.id.iv_tx_atm)
-    }
+    inner class TxTransactionViewHolder(val binding: TxListItemTxViewBinding) :
+        TxViewHolder(binding)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TxViewHolder {
         when (viewType) {
             VIEW_TYPE_ACCOUNT_HEADING -> {
-                return TxAccountHeadingViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.tx_list_item_header_view, parent, false
-                    )
+                val binding = TxListItemHeaderViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
                 )
+                return TxAccountHeadingViewHolder(binding)
             }
             VIEW_TYPE_TX -> {
-                return TxTransactionViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.tx_list_item_tx_view, parent, false
-                    )
+                val binding = TxListItemTxViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
                 )
+                return TxTransactionViewHolder(binding)
             }
             VIEW_TYPE_TX_DATE_HEADING -> {
-                return TxDateHeadingViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.tx_list_item_date_view, parent, false
-                    )
+                val binding = TxListItemDateViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
                 )
+                return TxDateHeadingViewHolder(binding)
             }
             else -> {
                 throw IllegalArgumentException("Unexpected view type $viewType")
@@ -94,48 +91,63 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
     override fun onBindViewHolder(holder: TxViewHolder, position: Int) {
         when (holder) {
             is TxAccountHeadingViewHolder -> {
-                val model: TxAccountHeadingListItemModel =
-                    listItemModels[position] as TxAccountHeadingListItemModel
-                holder.accountNameTextView.text = model.accountName
-                holder.accountNumberTextView.text = model.accountNumber
-                holder.availableFundsTextView.text = model.availableFunds?.getDollarString()
-                holder.accountBalanceTextView.text = model.accountBalance?.getDollarString()
-                holder.root.setOnClickListener(null)
+                bindAccountHeadingViewHolder(holder, listItemModels[position] as TxAccountHeadingListItemModel)
             }
             is TxTransactionViewHolder -> {
-                val model: TxTransactionListItemModel =
-                    listItemModels[position] as TxTransactionListItemModel
-                holder.txDetailsTextView.text = Html.fromHtml(
-                    if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description,
-                    Html.FROM_HTML_MODE_LEGACY
-                )
-                holder.txAmountTextView.text = model.amount?.getDollarString()
-
-                if (model.isAtm == true) {
-                    holder.txAtmImageView.visibility = View.VISIBLE
-                    holder.root.setOnClickListener() {
-                        if (model.atmId != null) {
-                            val atmData = findAtmById(model.atmId)
-                            if (atmData != null) {
-                                val intent = Intent(holder.root.context, MapsActivity::class.java)
-                                intent.putExtra(MapsActivity.ARG_ATM, atmData)
-                                holder.root.context.startActivity(intent)
-                            }
-                        }
-                    }
-                } else {
-                    holder.txAtmImageView.visibility = View.GONE
-                    holder.root.setOnClickListener(null)
-                }
+                bindTxViewHolder(holder, listItemModels[position] as TxTransactionListItemModel)
             }
             is TxDateHeadingViewHolder -> {
-                val model: TxDateHeadingListItemModel =
-                    listItemModels[position] as TxDateHeadingListItemModel
-                holder.txDateTextView.text = model.date
-                holder.txAgeTextView.text = model.daysAgo
-                holder.root.setOnClickListener(null)
+                bindDateHeadingViewHolder(holder, listItemModels[position] as TxDateHeadingListItemModel)
             }
         }
+    }
+
+    private fun bindDateHeadingViewHolder(
+        holder: TxDateHeadingViewHolder,
+        model: TxDateHeadingListItemModel
+    ) {
+        holder.binding.tvTxDate.text = model.date
+        holder.binding.tvTxAge.text = model.daysAgo
+        holder.binding.root.setOnClickListener(null)
+    }
+
+    private fun bindTxViewHolder(
+        holder: TxTransactionViewHolder,
+        model: TxTransactionListItemModel
+    ) {
+        holder.binding.tvTxDetails.text = Html.fromHtml(
+            if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description,
+            Html.FROM_HTML_MODE_LEGACY
+        )
+        holder.binding.tvTxAmount.text = model.amount?.getDollarString()
+
+        if (model.isAtm == true) {
+            holder.binding.ivTxAtm.visibility = View.VISIBLE
+            holder.binding.root.setOnClickListener() {
+                if (model.atmId != null) {
+                    val atmData = findAtmById(model.atmId)
+                    if (atmData != null) {
+                        val intent = Intent(holder.binding.root.context, MapsActivity::class.java)
+                        intent.putExtra(MapsActivity.ARG_ATM, atmData)
+                        holder.binding.root.context.startActivity(intent)
+                    }
+                }
+            }
+        } else {
+            holder.binding.ivTxAtm.visibility = View.GONE
+            holder.binding.root.setOnClickListener(null)
+        }
+    }
+
+    private fun bindAccountHeadingViewHolder(
+        holder: TxAccountHeadingViewHolder,
+        model: TxAccountHeadingListItemModel
+    ) {
+        holder.binding.tvAccountName.text = model.accountName
+        holder.binding.tvAccountNumber.text = model.accountNumber
+        holder.binding.tvAvailableFundsValue.text = model.availableFunds?.getDollarString()
+        holder.binding.tvAccountBalanceValue.text = model.accountBalance?.getDollarString()
+        holder.binding.root.setOnClickListener(null)
     }
 
     override fun getItemCount(): Int {

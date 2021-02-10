@@ -17,18 +17,15 @@ import timber.log.Timber
 
 /**
  * Note: having trouble getting view binding going with google maps <fragment>
+ * See: ActivityMapsBinding.kt
  */
 class MapsActivity : Activity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-
     private lateinit var mAtm: XAtm
-
-    private lateinit var binding : ActivityMapsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMapsBinding.inflate(layoutInflater)
 
         setContentView(R.layout.activity_maps)
 
