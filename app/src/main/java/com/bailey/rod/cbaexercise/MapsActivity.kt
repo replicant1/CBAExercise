@@ -1,13 +1,13 @@
 package com.bailey.rod.cbaexercise
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.bailey.rod.cbaexercise.data.XAtm
 import com.bailey.rod.cbaexercise.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -15,11 +15,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import timber.log.Timber
 
-/**
- * Note: having trouble getting view binding going with google maps <fragment>
- * See: ActivityMapsBinding.kt
- */
-class MapsActivity : Activity(), OnMapReadyCallback {
+
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mAtm: XAtm
@@ -39,8 +36,12 @@ class MapsActivity : Activity(), OnMapReadyCallback {
             Timber.w(ex)
         }
 
-        // Obtain the MapFragment and get notified when the map is ready to be used.
-        val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment
+        /**
+         * Note: having trouble getting view binding going with google maps fragment
+         * See: ActivityMapsBinding.kt
+         * Resorting to 'findFragmentById' to get hold of the SupportMapFragment for the moment.
+         */
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
