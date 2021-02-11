@@ -34,7 +34,6 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/activity_title_account_details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +47,6 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"/>
     </application>
 

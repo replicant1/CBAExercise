@@ -10,6 +10,7 @@ import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.databinding.ActivityMainBinding
 import com.bailey.rod.cbaexercise.ui.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.MainActivityViewModel
+import timber.log.Timber
 
 /**
  * Summary of account activity as supplied by server.
@@ -29,7 +30,12 @@ class MainActivity : AppCompatActivity() {
         binding.txSwipeRefresh.setOnRefreshListener { fetchData() }
 
         observeViewModel()
-        fetchData()
+
+        if (viewModel.accountActivitySummary.value == null) {
+            fetchData()
+        }else {
+            handleFetchedData(viewModel.accountActivitySummary.value)
+        }
     }
 
     private fun observeViewModel() {
@@ -37,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchData() {
+        Timber.i("Forcing refresh from server")
         binding.txSwipeRefresh.isRefreshing = true
         viewModel.fetchAsyncAccountActivitySummary()
     }
