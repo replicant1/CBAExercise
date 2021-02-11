@@ -1,6 +1,7 @@
 package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,9 @@ import com.bailey.rod.cbaexercise.databinding.ActivityMainBinding
 import com.bailey.rod.cbaexercise.ui.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.MainActivityViewModel
 
+/**
+ * Summary of account activity as supplied by server.
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -34,18 +38,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchData() {
         binding.txSwipeRefresh.isRefreshing = true
-        viewModel.fetchAccountActivitySummary()
+        viewModel.fetchAsyncAccountActivitySummary()
     }
 
-    /**
-     * Apply account activity data to RecyclerView
-     */
     private fun handleFetchedData(accountSummary: XAccountActivitySummary?) {
         if (accountSummary != null) {
             binding.rvTxList.layoutManager = LinearLayoutManager(this)
             binding.rvTxList.adapter = TxListAdapter(accountSummary)
         } else {
-            // TODO Show failure message in Toast
+            Toast.makeText(this, getString(R.string.fail_account_activity_load), Toast.LENGTH_LONG)
+                .show()
         }
         binding.txSwipeRefresh.isRefreshing = false
     }

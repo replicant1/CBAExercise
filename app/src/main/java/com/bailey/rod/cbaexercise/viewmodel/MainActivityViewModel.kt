@@ -14,10 +14,7 @@ class MainActivityViewModel() : ViewModel() {
 
     val accountActivitySummary = MutableLiveData<XAccountActivitySummary>()
 
-    /**
-     * Async fetch account activity data over network. Publish results to screen, errors to Toast.
-     */
-    public fun fetchAccountActivitySummary() {
+    fun fetchAsyncAccountActivitySummary() {
         Timber.i("Fetching account activity summary from network")
 
         val request = ServiceBuilder.buildService(CbaService::class.java)
