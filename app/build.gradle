@@ -23,6 +23,8 @@ android {
 
     buildTypes {
         all {
+            // Set UseLocalData to false for your chosen build flavor to use remote account
+            // activity summary data rather than the local data in SampleAccountDataFile
             buildConfigField "String", "ServiceBaseUrl", "\"https://www.dropbox.com/\""
             buildConfigField "long", "ConnectTimeoutMinutes", "1L"
             buildConfigField "long", "ReadTimeoutMinutes", "1L"
@@ -30,7 +32,14 @@ android {
             buildConfigField "String", "CbaServiceKey", "\"tewg9b71x0wrou9\""
             buildConfigField "String", "CbaServiceFileName", "\"data.json\""
             buildConfigField "int", "CbaServiceDownloadFlag", "1"
+
+            // Set UseLocalData to true for your chosen build flavor to use the account activity
+            // summary data in SampleAccountDataFile
             buildConfigField "String", "SampleAccountDataFile", "\"sample_account_data.json\""
+            buildConfigField "boolean", "UseLocalData", "false"
+
+            buildConfigField "float", "InitialMapZoomLevel", "16"
+
         }
         release {
             minifyEnabled false
@@ -49,7 +58,7 @@ android {
 
 dependencies {
 
-    // Google' GSON library is used for deserialising JSON data
+    // Google' GSON library is used for de-serialising JSON data
     implementation "com.google.code.gson:gson:$gson_version"
 
     // 'Retrofit' is for RESTful network communications.

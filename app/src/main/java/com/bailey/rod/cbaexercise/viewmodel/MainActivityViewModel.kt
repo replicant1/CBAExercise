@@ -1,8 +1,10 @@
 package com.bailey.rod.cbaexercise.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bailey.rod.cbaexercise.BuildConfig
+import com.bailey.rod.cbaexercise.assetFileAsString
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.net.CbaService
 import com.bailey.rod.cbaexercise.net.ServiceBuilder
@@ -50,11 +52,8 @@ class MainActivityViewModel() : ViewModel() {
         })
     }
 
-/*
-private fun parseJson(): XAccountActivitySummary {
-    val jsonString = applicationContext.assetFileAsString(BuildConfig.SampleAccountDataFile)
-    return XAccountActivitySummary.parse(jsonString)
-}
-*/
-
+    fun loadSyncAccountActivitySummary(ctx: Context): XAccountActivitySummary {
+        val jsonString = ctx.assetFileAsString(BuildConfig.SampleAccountDataFile)
+        return XAccountActivitySummary.parse(jsonString)
+    }
 }

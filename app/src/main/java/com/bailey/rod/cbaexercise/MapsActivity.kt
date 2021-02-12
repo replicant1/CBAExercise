@@ -3,7 +3,6 @@ package com.bailey.rod.cbaexercise
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bailey.rod.cbaexercise.data.XAtm
-import com.bailey.rod.cbaexercise.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,7 +25,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         setContentView(R.layout.activity_maps)
 
-        val atmData = intent.getStringExtra(ARG_ATM)
+        val atmData = intent.getStringExtra(EXTRA_ARG_ATM)
         Timber.d("atmData = $atmData")
 
         try {
@@ -60,13 +59,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         .snippet(mAtm.address)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_atm_commbank))
                 )
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, MAP_INITIAL_ZOOM))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
+                    BuildConfig.InitialMapZoomLevel))
             }
         }
     }
 
     companion object {
-        const val ARG_ATM = "com.bailey.rod.cbaexercise.atm"
-        const val MAP_INITIAL_ZOOM = 16F
+        const val EXTRA_ARG_ATM = "com.bailey.rod.cbaexercise.atm"
     }
 }

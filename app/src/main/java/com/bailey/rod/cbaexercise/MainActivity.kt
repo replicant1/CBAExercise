@@ -45,7 +45,11 @@ class MainActivity : AppCompatActivity() {
     private fun fetchData() {
         Timber.i("Forcing refresh from server")
         binding.txSwipeRefresh.isRefreshing = true
-        viewModel.fetchAsyncAccountActivitySummary()
+        if (BuildConfig.UseLocalData) {
+            viewModel.loadSyncAccountActivitySummary(this)
+        } else {
+            viewModel.fetchAsyncAccountActivitySummary()
+        }
     }
 
     private fun handleFetchedData(accountSummary: XAccountActivitySummary?) {

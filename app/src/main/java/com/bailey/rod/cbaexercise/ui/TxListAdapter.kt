@@ -128,7 +128,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                     val atmData = findAtmById(model.atmId)
                     if (atmData != null) {
                         val intent = Intent(holder.binding.root.context, MapsActivity::class.java)
-                        intent.putExtra(MapsActivity.ARG_ATM, atmData)
+                        intent.putExtra(MapsActivity.EXTRA_ARG_ATM, atmData)
                         holder.binding.root.context.startActivity(intent)
                     }
                 }
