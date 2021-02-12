@@ -22,6 +22,16 @@ android {
     }
 
     buildTypes {
+        all {
+            buildConfigField "String", "ServiceBaseUrl", "\"https://www.dropbox.com/\""
+            buildConfigField "long", "ConnectTimeoutMinutes", "1L"
+            buildConfigField "long", "ReadTimeoutMinutes", "1L"
+            buildConfigField "long", "WriteTimeoutMinutes", "2L"
+            buildConfigField "String", "CbaServiceKey", "\"tewg9b71x0wrou9\""
+            buildConfigField "String", "CbaServiceFileName", "\"data.json\""
+            buildConfigField "int", "CbaServiceDownloadFlag", "1"
+            buildConfigField "String", "SampleAccountDataFile", "\"sample_account_data.json\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

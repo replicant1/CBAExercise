@@ -2,6 +2,7 @@ package com.bailey.rod.cbaexercise.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bailey.rod.cbaexercise.BuildConfig
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.net.CbaService
 import com.bailey.rod.cbaexercise.net.ServiceBuilder
@@ -20,9 +21,9 @@ class MainActivityViewModel() : ViewModel() {
         val request = ServiceBuilder.buildService(CbaService::class.java)
         val call =
             request.getAccountActivitySummary(
-                SERVICE_KEY,
-                SERVICE_FILE_NAME,
-                SERVICE_DOWNLOAD_FLAG
+                BuildConfig.CbaServiceKey,
+                BuildConfig.CbaServiceFileName,
+                BuildConfig.CbaServiceDownloadFlag
             )
 
         call.enqueue(object : Callback<XAccountActivitySummary> {
@@ -49,15 +50,11 @@ class MainActivityViewModel() : ViewModel() {
         })
     }
 
-    //    private fun parseJson(): XAccountActivitySummary {
-//        val jsonString = applicationContext.assetFileAsString(SAMPLE_ACCOUNT_DATA_FILE)
-//        return XAccountActivitySummary.parse(jsonString)
-//    }
+/*
+private fun parseJson(): XAccountActivitySummary {
+    val jsonString = applicationContext.assetFileAsString(BuildConfig.SampleAccountDataFile)
+    return XAccountActivitySummary.parse(jsonString)
+}
+*/
 
-    companion object {
-        //        const val SAMPLE_ACCOUNT_DATA_FILE = "sample_account_data.json"
-        const val SERVICE_KEY = "tewg9b71x0wrou9"
-        const val SERVICE_FILE_NAME = "data.json"
-        const val SERVICE_DOWNLOAD_FLAG = 1
-    }
 }
