@@ -1,6 +1,7 @@
 package com.bailey.rod.cbaexercise.viewmodel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bailey.rod.cbaexercise.BuildConfig
@@ -15,7 +16,13 @@ import timber.log.Timber
 
 class MainActivityViewModel() : ViewModel() {
 
-    val accountActivitySummary = MutableLiveData<XAccountActivitySummary>()
+    private val _accountActivitySummary = MutableLiveData<XAccountActivitySummary>()
+
+    // Zero based index of top-most item in list
+    val firstVisibleItemPosition = MutableLiveData<Int>()
+
+    // Expose the immutable version of the LiveData
+    val accountActivitySummary : LiveData<XAccountActivitySummary> = _accountActivitySummary
 
     fun fetchAsyncAccountActivitySummary() {
         Timber.i("Fetching account activity summary from network")
@@ -37,17 +44,18 @@ class MainActivityViewModel() : ViewModel() {
                     Timber.d("Response from server: $response")
                     val summary: XAccountActivitySummary? = response.body()
                     if (summary != null) {
-                        accountActivitySummary.postValue(summary)
+                        _accountActivitySummary.value = summary
+                        firstVisibleItemPosition.value = 0
                     } else {
-                        accountActivitySummary.postValue(null)
+                        _accountActivitySummary.value = null
                     }
                 } else {
-                    accountActivitySummary.postValue(null)
+                    _accountActivitySummary.value = null
                 }
             }
 
             override fun onFailure(call: Call<XAccountActivitySummary>, t: Throwable) {
-                accountActivitySummary.postValue(null)
+                _accountActivitySummary.value = null
             }
         })
     }
