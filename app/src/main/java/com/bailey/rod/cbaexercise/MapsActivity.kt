@@ -9,6 +9,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -52,7 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val atmLocation = mAtm.location
             if ((atmLocation?.lat != null) && (atmLocation.lng != null)) {
                 val markerLatLng = LatLng(atmLocation.lat.toDouble(), atmLocation.lng.toDouble())
-                mMap.addMarker(
+                val marker = mMap.addMarker(
                     MarkerOptions()
                         .position(markerLatLng)
                         .title(mAtm.name)
@@ -61,6 +62,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
                     BuildConfig.InitialMapZoomLevel))
+                marker.showInfoWindow()
             }
         }
     }
