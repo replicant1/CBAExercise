@@ -3,6 +3,9 @@ package com.bailey.rod.cbaexercise
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
+/**
+ * Tests for the function that turns a value like 4.09 into a string like "$4.09"
+ */
 class DollarStringTest {
     @Test
     fun zeroDollars() {

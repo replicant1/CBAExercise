@@ -6,4 +6,12 @@
     <string name="tx_list_account_balance">Account balance</string>
     <string name="title_activity_maps">Find us</string>
     <string name="fail_account_activity_load">Failed to load account activity summary</string>
+
+    <string name="age_one_year_ago">Last year</string>
+    <string name="age_many_years_ago">%1$d years ago</string>
+    <string name="age_one_month_ago">Last month</string>
+    <string name="age_many_months_ago">%1$d months ago</string>
+    <string name="age_no_days_ago">Today</string>
+    <string name="age_one_day_ago">Yesterday</string>
+    <string name="age_many_days_ago">%1$d days ago</string>
 </resources>

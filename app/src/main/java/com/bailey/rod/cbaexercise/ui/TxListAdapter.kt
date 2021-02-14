@@ -1,5 +1,6 @@
 package com.bailey.rod.cbaexercise.ui
 
+import android.content.Context
 import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
+class TxListAdapter(private val context: Context, private val accountSummary: XAccountActivitySummary) :
     RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
 
     private val listItemModels: List<TxListItemModel> = createListItemModels()
@@ -60,7 +61,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
         when (viewType) {
             VIEW_TYPE_ACCOUNT_HEADING -> {
                 val binding = TxListItemHeaderViewBinding.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     parent,
                     false
                 )
@@ -68,7 +69,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             }
             VIEW_TYPE_TX -> {
                 val binding = TxListItemTxViewBinding.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     parent,
                     false
                 )
@@ -76,7 +77,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
             }
             VIEW_TYPE_TX_DATE_HEADING -> {
                 val binding = TxListItemDateViewBinding.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     parent,
                     false
                 )
@@ -209,7 +210,7 @@ class TxListAdapter(private val accountSummary: XAccountActivitySummary) :
                 result.add(
                     TxDateHeadingListItemModel(
                         DATE_TIME_OUTPUT_FORMATTER.format(txDate),
-                        LocalDate.now().daysAgoLabel(txDate)
+                        LocalDate.now().daysAgoLabel(context, txDate)
                     )
                 )
                 currentDate = txDate
