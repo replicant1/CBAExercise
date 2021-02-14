@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             val linearLayoutManager = LinearLayoutManager(this)
 
             binding.rvTxList.layoutManager = linearLayoutManager
-            binding.rvTxList.adapter = TxListAdapter(accountSummary)
+            binding.rvTxList.adapter = TxListAdapter(this, accountSummary)
 
             val posToRestore = viewModel.firstVisibleItemPosition.value
             val currentPos = linearLayoutManager.findFirstVisibleItemPosition()

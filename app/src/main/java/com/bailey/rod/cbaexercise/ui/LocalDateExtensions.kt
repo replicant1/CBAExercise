@@ -1,5 +1,7 @@
 package com.bailey.rod.cbaexercise.ui
 
+import android.content.Context
+import com.bailey.rod.cbaexercise.R
 import java.time.LocalDate
 
 
@@ -11,21 +13,30 @@ import java.time.LocalDate
  * For ages [1 month, 12 months) show "X months ago". special cases if x == 1 then "last month".
  * For ages [1 year, -) show "X years ago". Special case: if x == 1 then "last year".
  */
-fun LocalDate.daysAgoLabel(then: LocalDate): String {
+fun LocalDate.daysAgoLabel(context: Context, then: LocalDate): String {
     val yearDiff = this.year - then.year
 
     if (yearDiff > 0) {
-        return if (yearDiff == 1) "Last year" else "$yearDiff years ago"
+        return if (yearDiff == 1)
+            context.getString(R.string.age_one_year_ago)
+        else
+            context.getString(R.string.age_many_years_ago, yearDiff)
     } else {
         val monthDiff = this.monthValue - then.monthValue
         if (monthDiff > 0) {
-            return if (monthDiff == 1) "Last month" else "$monthDiff months ago"
+            return if (monthDiff == 1)
+                context.getString(R.string.age_one_month_ago)
+            else
+                context.getString(R.string.age_many_months_ago, monthDiff)
         } else {
             val dayDiff = this.dayOfMonth - then.dayOfMonth
-            if (dayDiff == 0) {
-                return "Today"
+           return if (dayDiff == 0) {
+                 context.getString(R.string.age_no_days_ago)
             } else {
-                return if (dayDiff == 1) "Yesterday" else "$dayDiff days ago"
+                 if (dayDiff == 1)
+                     context.getString(R.string.age_one_day_ago)
+                 else
+                     context.getString(R.string.age_many_days_ago, dayDiff)
             }
         }
     }
