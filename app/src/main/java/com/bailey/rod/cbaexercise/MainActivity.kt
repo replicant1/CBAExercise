@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*
-     ** Note we don't observe viewModel.firstVisibleListPosition. We get its value synchronously
+     * Note we don't observe viewModel.firstVisibleListPosition. We get its value synchronously
      * after setting new list data (see #handleFetchedData)
      */
     private fun observeViewModel() {

@@ -21,7 +21,7 @@ class MainActivityViewModel() : ViewModel() {
     // Zero based index of top-most item in list
     val firstVisibleItemPosition = MutableLiveData<Int>()
 
-    // Expose the immutable version of the LiveData
+    // Expose the read-only version of the accountActivitySummary
     val accountActivitySummary : LiveData<XAccountActivitySummary> = _accountActivitySummary
 
     fun fetchAsyncAccountActivitySummary() {
