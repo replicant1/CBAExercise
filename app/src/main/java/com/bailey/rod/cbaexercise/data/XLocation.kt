@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class XLocation(
     @SerializedName("lat")
-    val lat: Float?,
+    val lat: Double?,
 
     @SerializedName("lng")
-    val lng: Float?
+    val lng: Double?
 )
