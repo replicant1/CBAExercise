@@ -5,16 +5,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bailey.rod.cbaexercise.BuildConfig
+import com.bailey.rod.cbaexercise.CbaApplication
 import com.bailey.rod.cbaexercise.assetFileAsString
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.net.CbaService
 import com.bailey.rod.cbaexercise.net.ServiceBuilder
+import com.bailey.rod.cbaexercise.repo.AccountRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivityViewModel() : ViewModel() {
+
+    init {
+        CbaApplication.graph.inject(this)
+    }
+
+    @Inject
+    lateinit var accountRepository: AccountRepository
 
     private val _accountActivitySummary = MutableLiveData<XAccountActivitySummary>()
 
@@ -26,6 +36,7 @@ class MainActivityViewModel() : ViewModel() {
 
     fun fetchAsyncAccountActivitySummary() {
         Timber.i("Fetching account activity summary from network")
+        Timber.d("Injected AccountRepository = ${accountRepository.hashCode()}")
 
         val request = ServiceBuilder.buildService(CbaService::class.java)
         val call =
