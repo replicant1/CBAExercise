@@ -9,8 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
 import com.bailey.rod.cbaexercise.databinding.ActivityMainBinding
+import com.bailey.rod.cbaexercise.db.DbAccountActivitySummary
+import com.bailey.rod.cbaexercise.net.google.Resource
+import com.bailey.rod.cbaexercise.net.google.Status
 import com.bailey.rod.cbaexercise.ui.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.MainActivityViewModel
+import com.google.gson.Gson
+import timber.log.Timber
 
 /**
  * Summary of account activity as supplied by server.
@@ -27,15 +32,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
-        binding.txSwipeRefresh.setOnRefreshListener { fetchData() }
+        binding.txSwipeRefresh.setOnRefreshListener { forceFetchData() }
 
         observeViewModel()
 
         // If the view model already has data then use it - else wait for new data to
         // be observed. Former occurs on orientation changes.
-        if (viewModel.accountActivitySummary.value == null) {
-            fetchData()
-        }
+//        if (viewModel.accountActivitySummary.value == null) {
+//            fetchData()
+//        }
     }
 
     /*
@@ -43,16 +48,25 @@ class MainActivity : AppCompatActivity() {
      * after setting new list data (see #handleFetchedData)
      */
     private fun observeViewModel() {
-        viewModel.accountActivitySummary.observe(this, Observer { handleFetchedData(it) })
+        viewModel.getAccountActivitySummary(forceFetch = false).observe(this, Observer {
+            val resource: Resource<DbAccountActivitySummary> = it
+            if (resource.status == Status.SUCCESS) {
+                Timber.d("Trying to parse this JSON: ${resource.data?.summaryJson}")
+                val xAccountActivitySummary = Gson().fromJson(resource.data?.summaryJson, XAccountActivitySummary::class.java)
+                handleFetchedData(xAccountActivitySummary)
+            } else {
+                Timber.w("Status of account activity summary retrieval = ${resource.status}")
+            }
+        })
     }
 
-    private fun fetchData() {
+    private fun forceFetchData() {
         binding.txSwipeRefresh.isRefreshing = true
-        if (BuildConfig.UseLocalData) {
-            viewModel.loadSyncAccountActivitySummary(this)
-        } else {
-            viewModel.fetchAsyncAccountActivitySummary()
-        }
+//        if (BuildConfig.UseLocalData) {
+//            viewModel.loadSyncAccountActivitySummary(this)
+//        } else {
+//            viewModel.fetchAsyncAccountActivitySummary()
+//        }
     }
 
     private fun handleFetchedData(accountSummary: XAccountActivitySummary?) {

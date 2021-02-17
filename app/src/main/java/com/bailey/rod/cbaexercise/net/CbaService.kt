@@ -1,7 +1,8 @@
 package com.bailey.rod.cbaexercise.net
 
+import androidx.lifecycle.LiveData
 import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
-import retrofit2.Call
+import com.bailey.rod.cbaexercise.net.google.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -22,6 +23,6 @@ interface CbaService {
         @Path("account_key") accountKey: String,
         @Path("file_name") fileName: String,
         @Query("dl") dl: Int
-    ): Call<XAccountActivitySummary>
+    ): LiveData<ApiResponse<XAccountActivitySummary>>
 
 }

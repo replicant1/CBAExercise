@@ -20,6 +20,13 @@ android {
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
     }
 
     buildTypes {
@@ -83,6 +90,10 @@ dependencies {
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     implementation "com.google.dagger:dagger:$dagger_version"
+
+    // Room database
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'
