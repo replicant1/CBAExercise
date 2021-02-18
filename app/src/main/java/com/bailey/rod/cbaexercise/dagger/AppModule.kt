@@ -1,10 +1,8 @@
 package com.bailey.rod.cbaexercise.dagger
 
 import android.app.Application
-import androidx.room.Room
-import com.bailey.rod.cbaexercise.db.AppDatabase
-import com.bailey.rod.cbaexercise.net.CbaService
-import com.bailey.rod.cbaexercise.net.ServiceBuilder
+import com.bailey.rod.cbaexercise.net.service.CbaAccountService
+import com.bailey.rod.cbaexercise.net.service.ServiceBuilder
 import com.bailey.rod.cbaexercise.repo.AccountRepository
 import dagger.Module
 import dagger.Provides
@@ -26,8 +24,8 @@ class AppModule(private val app: Application) {
 
     @Singleton
     @Provides
-    fun provideCbaService(): CbaService {
-        return ServiceBuilder.buildService(CbaService::class.java)
+    fun provideCbaService(): CbaAccountService {
+        return ServiceBuilder.buildService(CbaAccountService::class.java)
     }
 
 }

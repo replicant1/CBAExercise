@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.ext
 
 import android.content.Context
 import java.io.BufferedReader

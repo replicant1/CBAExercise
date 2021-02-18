@@ -5,7 +5,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.bailey.rod.cbaexercise.ui.daysAgoLabel
+import com.bailey.rod.cbaexercise.ext.daysAgoLabel
+import com.bailey.rod.cbaexercise.view.AccountOverviewActivity
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -20,8 +21,8 @@ class DaysAgoLabelInstrumentedTest {
     lateinit var ctx : Context
 
     @get: Rule
-    var activityRule: ActivityScenarioRule<MainActivity> =
-        ActivityScenarioRule(MainActivity::class.java)
+    var activityRule: ActivityScenarioRule<AccountOverviewActivity> =
+        ActivityScenarioRule(AccountOverviewActivity::class.java)
 
     @Before
     fun populateCtx() {

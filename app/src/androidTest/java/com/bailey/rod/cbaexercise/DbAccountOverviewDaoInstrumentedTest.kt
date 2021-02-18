@@ -5,25 +5,27 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bailey.rod.cbaexercise.db.AppDatabase
-import com.bailey.rod.cbaexercise.db.DbAccountActivitySummary
-import com.bailey.rod.cbaexercise.db.DbAccountActivitySummaryDao
+import com.bailey.rod.cbaexercise.db.DbAccountOverview
+import com.bailey.rod.cbaexercise.db.DbAccountOverviewDao
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @RunWith(AndroidJUnit4::class)
-class DbAccountActivitySummaryDaoTest {
+class DbAccountOverviewDaoInstrumentedTest {
 
-    lateinit var dao:DbAccountActivitySummaryDao
+    lateinit var dao:DbAccountOverviewDao
     lateinit var db: AppDatabase
 
     @Before
     fun createDb() {
         val ctx : Context = ApplicationProvider.getApplicationContext()
         db = Room.inMemoryDatabaseBuilder(ctx, AppDatabase::class.java).build()
-        dao = db.dbAccountActivitySummaryDao()
+        dao = db.dbAccountOverviewDao()
     }
 
     @After
@@ -34,24 +36,30 @@ class DbAccountActivitySummaryDaoTest {
 
     @Test
     fun insertDao() {
-        val newSummary = DbAccountActivitySummary("1234", "json")
+        val fetchTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        val newSummary = DbAccountOverview("1234", fetchTime, "{ json : 5 }")
         dao.insert(newSummary)
         Assert.assertEquals(1, dao.getAllSync().size)
     }
 
     @Test
     fun deleteAll() {
-        val newSummary = DbAccountActivitySummary("2345", "somejson")
+        val fetchTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        val newSummary = DbAccountOverview("2345", fetchTime, "{ bob : \"hi\" }")
         dao.insert(newSummary)
         dao.deleteAll()
         Assert.assertEquals(0, dao.getAllSync().size)
     }
 
     @Test
-    fun getFirst() {
-        val newSummary = DbAccountActivitySummary("1234", "json")
+    fun getSync() {
+        val fetchTime = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+        val newSummary = DbAccountOverview("1234", fetchTime, "{ alice : 23 }")
         dao.insert(newSummary)
-        val loaded : DbAccountActivitySummary? = dao.getSync()
+        val loaded : DbAccountOverview? = dao.getSync()
         Assert.assertNotNull(loaded)
+        Assert.assertEquals("1234", loaded?.accountNumber)
+        Assert.assertEquals(fetchTime, loaded?.fetchTime)
+        Assert.assertEquals("{ alice : 23 }", loaded?.overviewJson)
     }
 }

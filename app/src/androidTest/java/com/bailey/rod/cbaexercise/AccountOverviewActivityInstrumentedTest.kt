@@ -8,7 +8,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.bailey.rod.cbaexercise.ui.TxListAdapter
+import com.bailey.rod.cbaexercise.view.AccountOverviewActivity
+import com.bailey.rod.cbaexercise.view.TxListAdapter
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.startsWith
 import org.junit.Assert.assertEquals
@@ -22,11 +23,11 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainActivityInstrumentedTest {
+class AccountOverviewActivityInstrumentedTest {
 
     @get: Rule
-    var activityRule: ActivityScenarioRule<MainActivity> =
-        ActivityScenarioRule(MainActivity::class.java)
+    var activityRule: ActivityScenarioRule<AccountOverviewActivity> =
+        ActivityScenarioRule(AccountOverviewActivity::class.java)
 
     @Test
     fun useAppContext() {

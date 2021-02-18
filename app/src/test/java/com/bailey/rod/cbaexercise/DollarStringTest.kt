@@ -1,5 +1,6 @@
 package com.bailey.rod.cbaexercise
 
+import com.bailey.rod.cbaexercise.ext.getDollarString
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

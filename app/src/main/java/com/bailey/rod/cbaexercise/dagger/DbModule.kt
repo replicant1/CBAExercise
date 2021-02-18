@@ -3,7 +3,7 @@ package com.bailey.rod.cbaexercise.dagger
 import android.app.Application
 import androidx.room.Room
 import com.bailey.rod.cbaexercise.db.AppDatabase
-import com.bailey.rod.cbaexercise.db.DbAccountActivitySummaryDao
+import com.bailey.rod.cbaexercise.db.DbAccountOverviewDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -23,7 +23,7 @@ class DbModule {
 
     @Singleton
     @Provides
-    fun provideSummary(db:AppDatabase) : DbAccountActivitySummaryDao {
-        return db.dbAccountActivitySummaryDao()
+    fun provideSummary(db:AppDatabase) : DbAccountOverviewDao {
+        return db.dbAccountOverviewDao()
     }
 }

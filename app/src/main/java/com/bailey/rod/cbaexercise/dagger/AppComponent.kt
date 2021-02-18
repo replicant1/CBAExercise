@@ -2,7 +2,7 @@ package com.bailey.rod.cbaexercise.dagger
 
 import android.app.Application
 import com.bailey.rod.cbaexercise.repo.AccountRepository
-import com.bailey.rod.cbaexercise.viewmodel.MainActivityViewModel
+import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -14,9 +14,9 @@ import javax.inject.Singleton
  * </pre>
  */
 @Singleton
-@Component(modules = [AppModule::class,DbModule::class])
+@Component(modules = [AppModule::class, DbModule::class])
 interface AppComponent {
     fun inject(app: Application)
-    fun inject(viewModel: MainActivityViewModel)
+    fun inject(viewModel: AccountOverviewViewModel)
     fun inject(repo: AccountRepository)
 }
