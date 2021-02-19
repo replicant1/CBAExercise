@@ -11,7 +11,10 @@ import com.bailey.rod.cbaexercise.net.google.Resource
 import com.bailey.rod.cbaexercise.repo.AccountRepository
 import javax.inject.Inject
 
-class AccountOverviewViewModel @Inject internal constructor(repo: AccountRepository) : ViewModel() {
+class AccountOverviewViewModel : ViewModel() {
+
+    @Inject
+    lateinit var repo: AccountRepository
 
     private val accountOverviewQuery = MutableLiveData<AccountOverviewQuery>()
 
