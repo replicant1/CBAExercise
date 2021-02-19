@@ -28,10 +28,10 @@ class AccountOverviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountOverviewBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this).get(AccountOverviewViewModel::class.java)
 
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(AccountOverviewViewModel::class.java)
         binding.txSwipeRefresh.setOnRefreshListener {
             viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(true))
         }
@@ -43,7 +43,7 @@ class AccountOverviewActivity : AppCompatActivity() {
 
     /*
      * Note we don't observe viewModel.firstVisibleListPosition. We get its value synchronously
-     * after setting new list data (see #handleFetchedData)
+     * after setting new list data from viewModel.accountOverview
      */
     private fun observeViewModel() {
         viewModel.accountOverview.observe(this, Observer {
@@ -57,6 +57,7 @@ class AccountOverviewActivity : AppCompatActivity() {
                     binding.txSwipeRefresh.isRefreshing = false
                 }
                 Status.LOADING -> {
+                    binding.txSwipeRefresh.isRefreshing = true
                 }
                 Status.ERROR -> {
                     handleFetchError()
@@ -103,6 +104,7 @@ class AccountOverviewActivity : AppCompatActivity() {
     private fun handleFetchError() {
         Toast.makeText(this, getString(R.string.fail_account_activity_load), Toast.LENGTH_LONG)
             .show()
+        Timber.w("Error fetching account overview")
     }
 
 }
