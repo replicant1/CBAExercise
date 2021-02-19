@@ -3,7 +3,7 @@ package com.bailey.rod.cbaexercise.data
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
-data class XAccountActivitySummary(
+data class XAccountOverview(
     @SerializedName("account")
     val account: XAccount?,
 
@@ -18,8 +18,8 @@ data class XAccountActivitySummary(
 ) {
 
     companion object {
-        fun parse(jsonString: String): XAccountActivitySummary {
-            val summary =  Gson().fromJson(jsonString, XAccountActivitySummary::class.java)
+        fun parse(jsonString: String): XAccountOverview {
+            val summary =  Gson().fromJson(jsonString, XAccountOverview::class.java)
 
             println("-- Setting pending = TRUE on the following transactions --")
             for (pendingTx in summary.pendingTransactions ?: emptyList()) {

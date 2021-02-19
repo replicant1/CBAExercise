@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise.ui
+package com.bailey.rod.cbaexercise.view
 
 import android.content.Context
 import android.content.Intent
@@ -8,18 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bailey.rod.cbaexercise.MapsActivity
-import com.bailey.rod.cbaexercise.data.XAccountActivitySummary
+import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
 import com.bailey.rod.cbaexercise.databinding.TxListItemDateViewBinding
 import com.bailey.rod.cbaexercise.databinding.TxListItemHeaderViewBinding
 import com.bailey.rod.cbaexercise.databinding.TxListItemTxViewBinding
-import com.bailey.rod.cbaexercise.getDollarString
+import com.bailey.rod.cbaexercise.ext.daysAgoLabel
+import com.bailey.rod.cbaexercise.ext.getDollarString
 import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TxListAdapter(private val context: Context, private val accountSummary: XAccountActivitySummary) :
+class TxListAdapter(
+    private val context: Context,
+    private val accountSummary: XAccountOverview
+) :
     RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
 
     private val listItemModels: List<TxListItemModel> = createListItemModels()
@@ -35,7 +38,8 @@ class TxListAdapter(private val context: Context, private val accountSummary: XA
 
     data class TxDateHeadingListItemModel(
         val date: String?,
-        val daysAgo: String?) : TxListItemModel
+        val daysAgo: String?
+    ) : TxListItemModel
 
     data class TxTransactionListItemModel(
         val effectiveDate: String?,
@@ -92,13 +96,19 @@ class TxListAdapter(private val context: Context, private val accountSummary: XA
     override fun onBindViewHolder(holder: TxViewHolder, position: Int) {
         when (holder) {
             is TxAccountHeadingViewHolder -> {
-                bindAccountHeadingViewHolder(holder, listItemModels[position] as TxAccountHeadingListItemModel)
+                bindAccountHeadingViewHolder(
+                    holder,
+                    listItemModels[position] as TxAccountHeadingListItemModel
+                )
             }
             is TxTransactionViewHolder -> {
                 bindTxViewHolder(holder, listItemModels[position] as TxTransactionListItemModel)
             }
             is TxDateHeadingViewHolder -> {
-                bindDateHeadingViewHolder(holder, listItemModels[position] as TxDateHeadingListItemModel)
+                bindDateHeadingViewHolder(
+                    holder,
+                    listItemModels[position] as TxDateHeadingListItemModel
+                )
             }
         }
     }
@@ -128,8 +138,9 @@ class TxListAdapter(private val context: Context, private val accountSummary: XA
                 if (model.atmId != null) {
                     val atmData = findAtmById(model.atmId)
                     if (atmData != null) {
-                        val intent = Intent(holder.binding.root.context, MapsActivity::class.java)
-                        intent.putExtra(MapsActivity.EXTRA_ARG_ATM, atmData)
+                        val intent =
+                            Intent(holder.binding.root.context, AtmOnMapActivity::class.java)
+                        intent.putExtra(AtmOnMapActivity.EXTRA_ARG_ATM, atmData)
                         holder.binding.root.context.startActivity(intent)
                     }
                 }

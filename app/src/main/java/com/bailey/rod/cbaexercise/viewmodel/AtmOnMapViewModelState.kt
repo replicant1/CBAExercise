@@ -3,9 +3,9 @@ package com.bailey.rod.cbaexercise.viewmodel
 import com.bailey.rod.cbaexercise.data.XAtm
 
 /**
- * View model state for the MapsActivity view.
+ * View model state for the AtmOnMapActivity view.
  */
-data class MapsActivityViewModelState(
+data class AtmOnMapViewModelState(
     val mapZoomLevel: Float,
     val mapCenterLatitude: Double?,
     val mapCenterLongitude: Double?,

@@ -33,7 +33,7 @@
         <!-- Account activity summary screen -->
 
         <activity
-            android:name=".MainActivity"
+            android:name=".view.AccountOverviewActivity"
             android:label="@string/activity_title_account_details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,9 +45,9 @@
         <!-- ATM location screen -->
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".AtmOnMapActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".view.AccountOverviewActivity"/>
     </application>
 
 </manifest>

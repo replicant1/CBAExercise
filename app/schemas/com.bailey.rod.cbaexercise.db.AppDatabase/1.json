@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "360965e67c114ae2f00460c760dc8853",
+    "entities": [
+      {
+        "tableName": "AccountOverviewTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`accountNumber` TEXT NOT NULL, `fetchTime` INTEGER NOT NULL, `overviewJson` TEXT NOT NULL, PRIMARY KEY(`accountNumber`))",
+        "fields": [
+          {
+            "fieldPath": "accountNumber",
+            "columnName": "accountNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fetchTime",
+            "columnName": "fetchTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "overviewJson",
+            "columnName": "overviewJson",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "accountNumber"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '360965e67c114ae2f00460c760dc8853')"
+    ]
+  }
+}

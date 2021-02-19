@@ -1,11 +1,13 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.bailey.rod.cbaexercise.BuildConfig
+import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAtm
-import com.bailey.rod.cbaexercise.viewmodel.MapsActivityViewModel
-import com.bailey.rod.cbaexercise.viewmodel.MapsActivityViewModelState
+import com.bailey.rod.cbaexercise.viewmodel.AtmOnMapViewModel
+import com.bailey.rod.cbaexercise.viewmodel.AtmOnMapViewModelState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,27 +20,27 @@ import com.google.gson.JsonSyntaxException
 import timber.log.Timber
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class AtmOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    private lateinit var viewModel: MapsActivityViewModel
+    private lateinit var viewModel: AtmOnMapViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.activity_atm_on_map)
 
         val atmData = intent.getStringExtra(EXTRA_ARG_ATM)
         Timber.d("atmData = $atmData")
 
-        viewModel = ViewModelProvider(this).get(MapsActivityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AtmOnMapViewModel::class.java)
 
         try {
             val mAtm: XAtm = Gson().fromJson(atmData, XAtm::class.java)
             // If the view model has some state info, restore that state into the view
             // Else initialise the view model's value for 'state'
             if (viewModel.state.value == null) {
-                val initState = MapsActivityViewModelState(
+                val initState = AtmOnMapViewModelState(
                     BuildConfig.InitialMapZoomLevel,
                     mAtm.location?.lat,
                     mAtm.location?.lng,
@@ -130,7 +132,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             println("zoom = ${mMap.cameraPosition.zoom}")
 
             // Only latitude, longitude and zoom changes are notified
-            val newState = MapsActivityViewModelState(
+            val newState = AtmOnMapViewModelState(
                 cameraPos.zoom,
                 cameraPos.target.latitude,
                 cameraPos.target.longitude,
