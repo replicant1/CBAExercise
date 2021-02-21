@@ -41,7 +41,6 @@ class AccountOverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Timber.i("*** Into AccountOverviewFragement.onCreateView ***")
-        // Inflate the layout for this fragment
         binding = FragmentAccountOverviewBinding.inflate(layoutInflater, container, false)
         binding.btnOverview.setOnClickListener {
             Navigation.findNavController(binding.root).navigate(

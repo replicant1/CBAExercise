@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
+import com.bailey.rod.cbaexercise.databinding.FragmentAtmOnMapBinding
+import timber.log.Timber
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +24,8 @@ class AtmOnMapFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding : FragmentAtmOnMapBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,8 +38,13 @@ class AtmOnMapFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_atm_on_map, container, false)
+        Timber.i("*** Into AtmOnMapFragment.onCreateView ***")
+        binding = FragmentAtmOnMapBinding.inflate(layoutInflater, container, false)
+        binding.btnMap.setOnClickListener {
+            Navigation.findNavController(binding.root).navigate(
+                R.id.action_atmOnMapFragment_to_accountOverviewFragment)
+        }
+        return binding.root
     }
 
     companion object {
