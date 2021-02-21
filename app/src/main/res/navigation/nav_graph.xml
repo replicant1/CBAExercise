@@ -24,6 +24,7 @@
             app:destination="@id/accountOverviewFragment" />
         <argument
             android:name="atmJson"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 </navigation>

@@ -1,10 +1,10 @@
 package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.bailey.rod.cbaexercise.databinding.FragmentAtmOnMapBinding
 import timber.log.Timber
@@ -24,13 +24,15 @@ class AtmOnMapFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding : FragmentAtmOnMapBinding
+    private lateinit var binding: FragmentAtmOnMapBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            val atmJson = AtmOnMapFragmentArgs.fromBundle(it).atmJson
+            Timber.d("*******************************************")
+            Timber.d("** Retrieved atmJson parameter = ${atmJson}")
+            Timber.d("*******************************************")
         }
     }
 
@@ -41,8 +43,9 @@ class AtmOnMapFragment : Fragment() {
         Timber.i("*** Into AtmOnMapFragment.onCreateView ***")
         binding = FragmentAtmOnMapBinding.inflate(layoutInflater, container, false)
         binding.btnMap.setOnClickListener {
-            Navigation.findNavController(binding.root).navigate(
-                R.id.action_atmOnMapFragment_to_accountOverviewFragment)
+            val action =
+                AtmOnMapFragmentDirections.actionAtmOnMapFragmentToAccountOverviewFragment()
+            Navigation.findNavController(binding.root).navigate(action)
         }
         return binding.root
     }

@@ -1,10 +1,10 @@
 package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
 import timber.log.Timber
@@ -24,7 +24,7 @@ class AccountOverviewFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding : FragmentAccountOverviewBinding
+    private lateinit var binding: FragmentAccountOverviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +43,9 @@ class AccountOverviewFragment : Fragment() {
         Timber.i("*** Into AccountOverviewFragement.onCreateView ***")
         binding = FragmentAccountOverviewBinding.inflate(layoutInflater, container, false)
         binding.btnOverview.setOnClickListener {
-            Navigation.findNavController(binding.root).navigate(
-                R.id.action_accountOverviewFragment_to_atmOnMapFragment)
+            val action =
+                AccountOverviewFragmentDirections.actionAccountOverviewFragmentToAtmOnMapFragment("{test data for atm json}")
+            Navigation.findNavController(binding.root).navigate(action)
         }
         return binding.root
     }

@@ -112,9 +112,6 @@ dependencies {
     // Navigation: Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
 
-    // Navigation SafeArgs
-//    implementation "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
