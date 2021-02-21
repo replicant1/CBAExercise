@@ -29,25 +29,32 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".view.NewMainActivity"
+            android:label="New Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
 
+        </activity>
         <!-- Account activity summary screen -->
 
-        <activity
-            android:name=".view.AccountOverviewActivity"
-            android:label="@string/activity_title_account_details">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--        <activity-->
+<!--            android:name=".view.AccountOverviewActivity"-->
+<!--            android:label="@string/activity_title_account_details">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <!-- ATM location screen -->
 
-        <activity
-            android:name=".AtmOnMapActivity"
-            android:label="@string/title_activity_maps"
-            android:parentActivityName=".view.AccountOverviewActivity"/>
+<!--        <activity-->
+<!--            android:name=".AtmOnMapActivity"-->
+<!--            android:label="@string/title_activity_maps"-->
+<!--            android:parentActivityName=".view.AccountOverviewActivity"/>-->
     </application>
 
 </manifest>
