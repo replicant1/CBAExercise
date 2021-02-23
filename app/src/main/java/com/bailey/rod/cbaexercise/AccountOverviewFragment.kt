@@ -18,7 +18,9 @@ import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
 import com.google.gson.Gson
 import timber.log.Timber
 
-
+/**
+ * The "Account Details" screen which gives an overview of recent account activity.
+ */
 class AccountOverviewFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountOverviewBinding
@@ -28,16 +30,8 @@ class AccountOverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.i("*** Into AccountOverviewFragement.onCreateView ***")
-
         viewModel = ViewModelProvider(this).get(AccountOverviewViewModel::class.java)
         binding = FragmentAccountOverviewBinding.inflate(layoutInflater, container, false)
-
-//        binding.btnOverview.setOnClickListener {
-//            val action =
-//                AccountOverviewFragmentDirections.actionAccountOverviewFragmentToAtmOnMapFragment("{test data for atm json}")
-//            Navigation.findNavController(binding.root).navigate(action)
-//        }
 
         binding.txSwipeRefresh.setOnRefreshListener {
             viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(true))

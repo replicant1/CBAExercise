@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
+import com.bailey.rod.cbaexercise.BuildConfig.InitialMapZoomLevel
 import com.bailey.rod.cbaexercise.data.XAtm
 import com.bailey.rod.cbaexercise.databinding.FragmentAtmOnMapBinding
 import com.bailey.rod.cbaexercise.viewmodel.AtmOnMapViewModel
@@ -27,15 +27,13 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var viewModel: AtmOnMapViewModel
     private lateinit var binding: FragmentAtmOnMapBinding
-    private lateinit var atmData : String
+    private lateinit var atmData: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             atmData = AtmOnMapFragmentArgs.fromBundle(it).atmJson
-            Timber.d("*******************************************")
-            Timber.d("** Retrieved atmJson parameter = ${atmData}")
-            Timber.d("*******************************************")
+            Timber.d("Retrieved atmJson arg = ${atmData}")
         }
     }
 
@@ -48,19 +46,13 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
         binding = FragmentAtmOnMapBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this).get(AtmOnMapViewModel::class.java)
 
-//        binding.btnMap.setOnClickListener {
-//            val action =
-//                AtmOnMapFragmentDirections.actionAtmOnMapFragmentToAccountOverviewFragment()
-//            Navigation.findNavController(binding.root).navigate(action)
-//        }
-
         try {
             val mAtm: XAtm = Gson().fromJson(atmData, XAtm::class.java)
             // If the view model has some state info, restore that state into the view
             // Else initialise the view model's value for 'state'
             if (viewModel.state.value == null) {
                 val initState = AtmOnMapViewModelState(
-                    BuildConfig.InitialMapZoomLevel,
+                    InitialMapZoomLevel,
                     mAtm.location?.lat,
                     mAtm.location?.lng,
                     true, // Initial state of the info window showing
@@ -72,23 +64,26 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
             Timber.w(ex)
         }
 
-        /**
-         * Note: having trouble getting view binding going with google maps fragment
-         * Resorting to 'findFragmentById' to get hold of the SupportMapFragment for the moment.
-         */
-        val mapFragment =  parentFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        // See https://issuetracker.google.com/issues/110573930
+        var mapFragment = SupportMapFragment.newInstance()
+        childFragmentManager.beginTransaction().add(
+            R.id.atm_position_on_map, mapFragment, "tag"
+        ).commit()
+
         mapFragment.getMapAsync(this)
 
         return binding.root
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        Timber.i("-- Into onMapReady with googleMap = ${googleMap} --")
         mMap = googleMap
         setupGoogleMap()
         applyStateDataToMap()
     }
 
     private fun setupGoogleMap() {
+        Timber.i("-- Into setupGoogleMap --")
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = false
         mMap.uiSettings.isCompassEnabled = false
@@ -104,6 +99,7 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
      * Apply this.mState to this.mMap, if both are non-null
      */
     private fun applyStateDataToMap() {
+        Timber.i("-- Into applyStateDataToMap --")
         val safeState = viewModel.state.value
         val safeAtm = viewModel.state.value?.atm
 

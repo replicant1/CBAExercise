@@ -8,6 +8,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.bailey.rod.cbaexercise.R
 
+/**
+ * Top level component in navigation hierarchy. All screens are individual fragments
+ * hosted by this activity.
+ */
 class MainHostActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
