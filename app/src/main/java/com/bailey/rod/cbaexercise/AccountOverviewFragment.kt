@@ -2,51 +2,52 @@ package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
+import com.bailey.rod.cbaexercise.db.DbAccountOverview
+import com.bailey.rod.cbaexercise.net.google.Resource
+import com.bailey.rod.cbaexercise.net.google.Status
+import com.bailey.rod.cbaexercise.view.TxListAdapter
+import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
+import com.google.gson.Gson
 import timber.log.Timber
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AccountOverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AccountOverviewFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private lateinit var binding: FragmentAccountOverviewBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Timber.i("*** Into AccountOverviewFragment.create ***")
-
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var viewModel: AccountOverviewViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Timber.i("*** Into AccountOverviewFragement.onCreateView ***")
+
+        viewModel = ViewModelProvider(this).get(AccountOverviewViewModel::class.java)
         binding = FragmentAccountOverviewBinding.inflate(layoutInflater, container, false)
-        binding.btnOverview.setOnClickListener {
-            val action =
-                AccountOverviewFragmentDirections.actionAccountOverviewFragmentToAtmOnMapFragment("{test data for atm json}")
-            Navigation.findNavController(binding.root).navigate(action)
+
+//        binding.btnOverview.setOnClickListener {
+//            val action =
+//                AccountOverviewFragmentDirections.actionAccountOverviewFragmentToAtmOnMapFragment("{test data for atm json}")
+//            Navigation.findNavController(binding.root).navigate(action)
+//        }
+
+        binding.txSwipeRefresh.setOnRefreshListener {
+            viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(true))
         }
 
         setHasOptionsMenu(true)
+
+        observeViewModel()
+
+        viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(false))
 
         return binding.root
     }
@@ -55,6 +56,7 @@ class AccountOverviewFragment : Fragment() {
         when (item.itemId) {
             R.id.action_predicted_spend -> {
                 Timber.d("** Raised Predicted Spend dialog here **")
+                // Contact view model to get predicted spend and pass to dialog for display
             }
         }
         return super.onOptionsItemSelected(item)
@@ -64,23 +66,70 @@ class AccountOverviewFragment : Fragment() {
         inflater.inflate(R.menu.menu_account_overview, menu)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AccountOverviewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AccountOverviewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    /*
+     * Note we don't observe viewModel.firstVisibleListPosition. We get its value synchronously
+     * after setting new list data from viewModel.accountOverview
+     */
+    private fun observeViewModel() {
+        viewModel.accountOverview.observe(viewLifecycleOwner, Observer {
+            val resource: Resource<DbAccountOverview> = it
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    Timber.d("Trying to parse this JSON: ${resource.data?.overviewJson}")
+                    val overview =
+                        Gson().fromJson(resource.data?.overviewJson, XAccountOverview::class.java)
+                    handleFetchSuccess(overview)
+                    binding.txSwipeRefresh.isRefreshing = false
+                }
+                Status.LOADING -> {
+                    binding.txSwipeRefresh.isRefreshing = true
+                }
+                Status.ERROR -> {
+                    handleFetchError()
+                    binding.txSwipeRefresh.isRefreshing = false
                 }
             }
+        })
     }
+
+    private fun handleFetchSuccess(overview: XAccountOverview?) {
+        Timber.i("Into handleFetchedData with overview = $overview")
+
+        if (overview != null) {
+            val linearLayoutManager = LinearLayoutManager(context)
+
+            binding.rvTxList.layoutManager = linearLayoutManager
+            binding.rvTxList.adapter = TxListAdapter(requireContext(), overview)
+
+            val posToRestore = viewModel.firstVisibleItemPosition.value
+            val currentPos = linearLayoutManager.findFirstVisibleItemPosition()
+
+            if ((currentPos != posToRestore) && (posToRestore != null)) {
+                binding.rvTxList.scrollToPosition(posToRestore)
+            }
+
+            binding.rvTxList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        val position = linearLayoutManager.findFirstVisibleItemPosition()
+                        viewModel.firstVisibleItemPosition.value = position
+                    }
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    // Empty
+                }
+            })
+
+        } else {
+            handleFetchError()
+        }
+    }
+
+    private fun handleFetchError() {
+        Toast.makeText(context, getString(R.string.fail_account_activity_load), Toast.LENGTH_LONG)
+            .show()
+        Timber.w("Error fetching account overview")
+    }
+
 }

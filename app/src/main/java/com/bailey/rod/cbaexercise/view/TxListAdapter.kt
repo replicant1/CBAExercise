@@ -138,10 +138,11 @@ class TxListAdapter(
                 if (model.atmId != null) {
                     val atmData = findAtmById(model.atmId)
                     if (atmData != null) {
-                        val intent =
-                            Intent(holder.binding.root.context, AtmOnMapActivity::class.java)
-                        intent.putExtra(AtmOnMapActivity.EXTRA_ARG_ATM, atmData)
-                        holder.binding.root.context.startActivity(intent)
+                        // TODO: Replace this with "action" for nav controller
+//                        val intent =
+//                            Intent(holder.binding.root.context, AtmOnMapActivity::class.java)
+//                        intent.putExtra(AtmOnMapActivity.EXTRA_ARG_ATM, atmData)
+//                        holder.binding.root.context.startActivity(intent)
                     }
                 }
             }

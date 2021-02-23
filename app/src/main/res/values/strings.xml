@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">CBA Exercise</string>
-    <string name="activity_title_account_details">Account details</string>
+
+    <string name="screen_title_account_overview">Account details</string>
+    <string name="screen_title_atm_on_map">Find us</string>
+
     <string name="tx_list_account_icon">Account icon</string>
     <string name="tx_list_available_funds">Available funds</string>
     <string name="tx_list_account_balance">Account balance</string>
