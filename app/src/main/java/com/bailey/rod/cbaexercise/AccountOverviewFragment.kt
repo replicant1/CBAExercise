@@ -1,44 +1,63 @@
-package com.bailey.rod.cbaexercise.view
+package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
+import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountOverview
-import com.bailey.rod.cbaexercise.databinding.ActivityAccountOverviewBinding
+import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
 import com.bailey.rod.cbaexercise.db.DbAccountOverview
 import com.bailey.rod.cbaexercise.net.google.Resource
 import com.bailey.rod.cbaexercise.net.google.Status
+import com.bailey.rod.cbaexercise.view.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
 import com.google.gson.Gson
 import timber.log.Timber
 
 /**
- * Summary of account activity as supplied by server.
+ * The "Account Details" screen which gives an overview of recent account activity.
  */
-class AccountOverviewActivity : AppCompatActivity() {
+class AccountOverviewFragment : Fragment() {
 
-    private lateinit var binding: ActivityAccountOverviewBinding
+    private lateinit var binding: FragmentAccountOverviewBinding
     private lateinit var viewModel: AccountOverviewViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityAccountOverviewBinding.inflate(layoutInflater)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewModel = ViewModelProvider(this).get(AccountOverviewViewModel::class.java)
-
-        setContentView(binding.root)
+        binding = FragmentAccountOverviewBinding.inflate(layoutInflater, container, false)
 
         binding.txSwipeRefresh.setOnRefreshListener {
             viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(true))
         }
 
+        setHasOptionsMenu(true)
+
         observeViewModel()
 
         viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(false))
+
+        return binding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_predicted_spend -> {
+                Timber.d("** Raised Predicted Spend dialog here **")
+                // Contact view model to get predicted spend and pass to dialog for display
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_account_overview, menu)
     }
 
     /*
@@ -46,7 +65,7 @@ class AccountOverviewActivity : AppCompatActivity() {
      * after setting new list data from viewModel.accountOverview
      */
     private fun observeViewModel() {
-        viewModel.accountOverview.observe(this, Observer {
+        viewModel.accountOverview.observe(viewLifecycleOwner, Observer {
             val resource: Resource<DbAccountOverview> = it
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -71,10 +90,10 @@ class AccountOverviewActivity : AppCompatActivity() {
         Timber.i("Into handleFetchedData with overview = $overview")
 
         if (overview != null) {
-            val linearLayoutManager = LinearLayoutManager(this)
+            val linearLayoutManager = LinearLayoutManager(context)
 
             binding.rvTxList.layoutManager = linearLayoutManager
-            binding.rvTxList.adapter = TxListAdapter(this, overview)
+            binding.rvTxList.adapter = TxListAdapter(requireContext(), overview)
 
             val posToRestore = viewModel.firstVisibleItemPosition.value
             val currentPos = linearLayoutManager.findFirstVisibleItemPosition()
@@ -102,7 +121,7 @@ class AccountOverviewActivity : AppCompatActivity() {
     }
 
     private fun handleFetchError() {
-        Toast.makeText(this, getString(R.string.fail_account_activity_load), Toast.LENGTH_LONG)
+        Toast.makeText(context, getString(R.string.fail_account_activity_load), Toast.LENGTH_LONG)
             .show()
         Timber.w("Error fetching account overview")
     }

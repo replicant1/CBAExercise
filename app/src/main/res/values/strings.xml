@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">CBA Exercise</string>
-    <string name="activity_title_account_details">Account details</string>
+
+    <string name="screen_title_account_overview">Account details</string>
+    <string name="screen_title_atm_on_map">Find us</string>
+
     <string name="tx_list_account_icon">Account icon</string>
     <string name="tx_list_available_funds">Available funds</string>
     <string name="tx_list_account_balance">Account balance</string>
@@ -14,4 +17,8 @@
     <string name="age_no_days_ago">Today</string>
     <string name="age_one_day_ago">Yesterday</string>
     <string name="age_many_days_ago">%1$d days ago</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="action_predict">Predicted Spend</string>
 </resources>

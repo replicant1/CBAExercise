@@ -1,13 +1,14 @@
 package com.bailey.rod.cbaexercise.view
 
 import android.content.Context
-import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.bailey.rod.cbaexercise.AccountOverviewFragmentDirections
 import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
 import com.bailey.rod.cbaexercise.databinding.TxListItemDateViewBinding
@@ -138,10 +139,9 @@ class TxListAdapter(
                 if (model.atmId != null) {
                     val atmData = findAtmById(model.atmId)
                     if (atmData != null) {
-                        val intent =
-                            Intent(holder.binding.root.context, AtmOnMapActivity::class.java)
-                        intent.putExtra(AtmOnMapActivity.EXTRA_ARG_ATM, atmData)
-                        holder.binding.root.context.startActivity(intent)
+                        val action = AccountOverviewFragmentDirections
+                            .actionAccountOverviewFragmentToAtmOnMapFragment(atmData)
+                        Navigation.findNavController(holder.binding.root).navigate(action)
                     }
                 }
             }
