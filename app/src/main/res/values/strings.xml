@@ -16,4 +16,6 @@
     <string name="age_many_days_ago">%1$d days ago</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="action_predict">Predicted Spend</string>
 </resources>

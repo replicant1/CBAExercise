@@ -1,9 +1,7 @@
 package com.bailey.rod.cbaexercise
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
@@ -47,7 +45,23 @@ class AccountOverviewFragment : Fragment() {
                 AccountOverviewFragmentDirections.actionAccountOverviewFragmentToAtmOnMapFragment("{test data for atm json}")
             Navigation.findNavController(binding.root).navigate(action)
         }
+
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_predicted_spend -> {
+                Timber.d("** Raised Predicted Spend dialog here **")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_account_overview, menu)
     }
 
     companion object {
