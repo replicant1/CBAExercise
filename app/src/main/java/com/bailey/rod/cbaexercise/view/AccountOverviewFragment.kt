@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.view
 
 import android.os.Bundle
 import android.view.*
@@ -8,12 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
 import com.bailey.rod.cbaexercise.db.DbAccountOverview
 import com.bailey.rod.cbaexercise.net.google.Resource
 import com.bailey.rod.cbaexercise.net.google.Status
-import com.bailey.rod.cbaexercise.view.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
 import com.google.gson.Gson
 import timber.log.Timber
@@ -44,20 +44,6 @@ class AccountOverviewFragment : Fragment() {
         viewModel.setAccountOverviewQuery(AccountOverviewViewModel.AccountOverviewQuery(false))
 
         return binding.root
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_predicted_spend -> {
-                Timber.d("** Raised Predicted Spend dialog here **")
-                // Contact view model to get predicted spend and pass to dialog for display
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_account_overview, menu)
     }
 
     /*

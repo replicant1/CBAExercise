@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bailey.rod.cbaexercise.BuildConfig.InitialMapZoomLevel
+import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAtm
 import com.bailey.rod.cbaexercise.databinding.FragmentAtmOnMapBinding
 import com.bailey.rod.cbaexercise.viewmodel.AtmOnMapViewModel
@@ -65,7 +66,7 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
         }
 
         // See https://issuetracker.google.com/issues/110573930
-        var mapFragment = SupportMapFragment.newInstance()
+        val mapFragment = SupportMapFragment.newInstance()
         childFragmentManager.beginTransaction().add(
             R.id.atm_position_on_map, mapFragment, "tag"
         ).commit()

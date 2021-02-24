@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bailey.rod.cbaexercise.AccountOverviewFragmentDirections
 import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.data.XAccountTransaction
 import com.bailey.rod.cbaexercise.databinding.TxListItemDateViewBinding
