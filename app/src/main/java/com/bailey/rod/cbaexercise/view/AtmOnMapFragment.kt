@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bailey.rod.cbaexercise.AtmOnMapFragmentArgs
 import com.bailey.rod.cbaexercise.BuildConfig.InitialMapZoomLevel
 import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAtm
