@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/accountOverviewFragment"
-        android:name="com.bailey.rod.cbaexercise.AccountOverviewFragment"
+        android:name="com.bailey.rod.cbaexercise.view.AccountOverviewFragment"
         android:label="@string/screen_title_account_overview"
         tools:layout="@layout/fragment_account_overview">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/atmOnMapFragment"
-        android:name="com.bailey.rod.cbaexercise.AtmOnMapFragment"
+        android:name="com.bailey.rod.cbaexercise.view.AtmOnMapFragment"
         android:label="@string/screen_title_atm_on_map"
         tools:layout="@layout/fragment_atm_on_map">
         <action

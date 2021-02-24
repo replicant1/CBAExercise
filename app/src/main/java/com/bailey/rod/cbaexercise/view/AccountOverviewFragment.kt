@@ -1,4 +1,4 @@
-package com.bailey.rod.cbaexercise
+package com.bailey.rod.cbaexercise.view
 
 import android.os.Bundle
 import android.view.*
@@ -8,12 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
 import com.bailey.rod.cbaexercise.db.DbAccountOverview
 import com.bailey.rod.cbaexercise.net.google.Resource
 import com.bailey.rod.cbaexercise.net.google.Status
-import com.bailey.rod.cbaexercise.view.TxListAdapter
 import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
 import com.google.gson.Gson
 import timber.log.Timber
