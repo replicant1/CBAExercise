@@ -46,20 +46,6 @@ class AccountOverviewFragment : Fragment() {
         return binding.root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_predicted_spend -> {
-                Timber.d("** Raised Predicted Spend dialog here **")
-                // Contact view model to get predicted spend and pass to dialog for display
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_account_overview, menu)
-    }
-
     /*
      * Note we don't observe viewModel.firstVisibleListPosition. We get its value synchronously
      * after setting new list data from viewModel.accountOverview
