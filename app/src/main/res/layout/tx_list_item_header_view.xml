@@ -1,133 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/cba_account_header_bg"
-    android:padding="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
+    <data>
+        <import type="com.bailey.rod.cbaexercise.ext.FloatExtensionsKt"/>
+        <variable
+            name="accountHeadingModel"
+            type="com.bailey.rod.cbaexercise.view.TxListAdapter.TxAccountHeadingListItemModel" />
+
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/cba_account_header_bg"
+        android:padding="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Account icon at top left of card -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_account_tx"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/tx_list_account_icon"
-                android:src="@drawable/icon_transactional"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <!-- Account icon at top left of card -->
 
-            <!-- Account name -->
+                <ImageView
+                    android:id="@+id/iv_account_tx"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/tx_list_account_icon"
+                    android:src="@drawable/icon_transactional"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_account_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Complete Access" />
+                <!-- Account name -->
 
-            <!-- Account number -->
+                <TextView
+                    android:id="@+id/tv_account_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@{accountHeadingModel.accountName}"
+                    tools:text="Complete Access" />
 
-            <TextView
-                android:id="@+id/tv_account_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/cba_deemphasised_text"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toBottomOf="@+id/tv_account_name"
-                tools:text="062005 1079 5866" />
+                <!-- Account number -->
 
-            <!-- Bottom (grey) panel containing "available funds" and "account balance" -->
+                <TextView
+                    android:id="@+id/tv_account_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/cba_deemphasised_text"
+                    android:textStyle="bold"
+                    android:text="@{accountHeadingModel.accountNumber}"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_account_name"
+                    tools:text="062005 1079 5866" />
 
-            <FrameLayout
-                android:id="@+id/fl_bottom_panel"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/cba_list_item_bg"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_account_tx" />
+                <!-- Bottom (grey) panel containing "available funds" and "account balance" -->
 
-            <!-- "Available funds" label -->
+                <FrameLayout
+                    android:id="@+id/fl_bottom_panel"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/cba_list_item_bg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_account_tx" />
 
-            <TextView
-                android:id="@+id/tv_available_funds_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="@string/tx_list_available_funds"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/cba_deemphasised_text"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toTopOf="@+id/fl_bottom_panel" />
+                <!-- "Available funds" label -->
 
-            <!-- "Available funds" amount in $ -->
+                <TextView
+                    android:id="@+id/tv_available_funds_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/tx_list_available_funds"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/cba_deemphasised_text"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                    app:layout_constraintTop_toTopOf="@+id/fl_bottom_panel" />
 
-            <TextView
-                android:id="@+id/tv_available_funds_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingEnd="8dp"
-                android:paddingBottom="4dp"
-                android:textAlignment="textEnd"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_available_funds_label"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="$372.10" />
+                <!-- "Available funds" amount in $ -->
 
-            <!-- "Account balance" label -->
+                <TextView
+                    android:id="@+id/tv_available_funds_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@{FloatExtensionsKt.getDollarString(accountHeadingModel.availableFunds)}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_available_funds_label"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="$372.10" />
 
-            <TextView
-                android:id="@+id/tv_account_balance_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/tx_list_account_balance"
-                android:textColor="@color/cba_deemphasised_text"
-                app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
-                app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label" />
+                <!-- "Account balance" label -->
 
-            <!-- "Account balance" amount in $ -->
+                <TextView
+                    android:id="@+id/tv_account_balance_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/tx_list_account_balance"
+                    android:textColor="@color/cba_deemphasised_text"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_account_tx"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_available_funds_label" />
 
-            <TextView
-                android:id="@+id/tv_account_balance_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingEnd="8dp"
-                android:paddingBottom="4dp"
-                android:textAlignment="textEnd"
-                android:textColor="@color/cba_deemphasised_text"
-                android:textStyle="bold"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_account_balance_label"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:text="$372.10" />
+                <!-- "Account balance" amount in $ -->
+
+                <TextView
+                    android:id="@+id/tv_account_balance_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/cba_deemphasised_text"
+                    android:textStyle="bold"
+                    android:text="@{FloatExtensionsKt.getDollarString(accountHeadingModel.accountBalance)}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_account_balance_label"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="$372.10" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+    </FrameLayout>
+</layout>

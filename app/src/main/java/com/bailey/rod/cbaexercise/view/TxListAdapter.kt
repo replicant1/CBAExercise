@@ -117,8 +117,7 @@ class TxListAdapter(
         holder: TxDateHeadingViewHolder,
         model: TxDateHeadingListItemModel
     ) {
-        holder.binding.tvTxDate.text = model.date
-        holder.binding.tvTxAge.text = model.daysAgo
+        holder.binding.dateHeadingModel = model
         holder.binding.root.setOnClickListener(null)
     }
 
@@ -154,10 +153,7 @@ class TxListAdapter(
         holder: TxAccountHeadingViewHolder,
         model: TxAccountHeadingListItemModel
     ) {
-        holder.binding.tvAccountName.text = model.accountName
-        holder.binding.tvAccountNumber.text = model.accountNumber
-        holder.binding.tvAvailableFundsValue.text = model.availableFunds?.getDollarString()
-        holder.binding.tvAccountBalanceValue.text = model.accountBalance?.getDollarString()
+        holder.binding.accountHeadingModel = model
         holder.binding.root.setOnClickListener(null)
     }
 

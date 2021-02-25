@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bailey.rod.cbaexercise.BR
 import com.bailey.rod.cbaexercise.R
 import com.bailey.rod.cbaexercise.data.XAccountOverview
 import com.bailey.rod.cbaexercise.databinding.FragmentAccountOverviewBinding
@@ -79,7 +80,7 @@ class AccountOverviewFragment : Fragment() {
             val linearLayoutManager = LinearLayoutManager(context)
 
             binding.rvTxList.layoutManager = linearLayoutManager
-            binding.rvTxList.adapter = TxListAdapter(requireContext(), overview)
+            binding.setVariable(BR.txListAdapter, TxListAdapter(requireContext(), overview) )
 
             val posToRestore = viewModel.firstVisibleItemPosition.value
             val currentPos = linearLayoutManager.findFirstVisibleItemPosition()

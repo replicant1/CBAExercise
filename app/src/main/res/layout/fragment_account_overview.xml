@@ -1,22 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.AccountOverviewFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/tx_swipe_refresh"
+    <data>
+
+        <variable
+            name="txListAdapter"
+            type="com.bailey.rod.cbaexercise.view.TxListAdapter" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:context=".view.AccountOverviewFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_tx_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/tx_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_tx_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adapter="@{txListAdapter}"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
