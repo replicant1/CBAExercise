@@ -80,7 +80,7 @@ class AccountOverviewFragment : Fragment() {
             val linearLayoutManager = LinearLayoutManager(context)
 
             binding.rvTxList.layoutManager = linearLayoutManager
-            binding.setVariable(BR.txListAdapter, TxListAdapter(requireContext(), overview) )
+            binding.txListAdapter = TxListAdapter(requireContext(), overview)
 
             val posToRestore = viewModel.firstVisibleItemPosition.value
             val currentPos = linearLayoutManager.findFirstVisibleItemPosition()
