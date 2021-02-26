@@ -43,7 +43,7 @@
             android:id="@+id/tv_tx_details"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text='@{Html.fromHtml(txModel.pending ? "&lt;b>PENDING:&lt;/b> " + txModel.description : txModel.description, Html.FROM_HTML_MODE_LEGACY)}'
+            android:text='@{txModel}'
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
