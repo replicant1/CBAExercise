@@ -57,8 +57,7 @@ class AccountOverviewFragment : Fragment() {
             when (resource.status) {
                 Status.SUCCESS -> {
                     Timber.d("Trying to parse this JSON: ${resource.data?.overviewJson}")
-                    val overview =
-                        Gson().fromJson(resource.data?.overviewJson, XAccountOverview::class.java)
+                    val overview = XAccountOverview.parse(resource.data?.overviewJson ?: "")
                     handleFetchSuccess(overview)
                     binding.txSwipeRefresh.isRefreshing = false
                 }

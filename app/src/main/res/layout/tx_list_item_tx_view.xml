@@ -1,54 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    android:paddingHorizontal="8dp"
-    android:paddingVertical="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ATM icon only appears for transactions conducted at an ATM -->
+    <data>
 
-    <ImageView
-        android:id="@+id/iv_tx_atm"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:contentDescription="ATM icon"
-        android:paddingEnd="8dp"
-        android:src="@drawable/marker_atm_commbank"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <import type="com.bailey.rod.cbaexercise.ext.FloatExtensionsKt" />
 
-    <!-- Textual description of the transaction -->
+        <import type="android.view.View" />
 
-    <TextView
-        android:id="@+id/tv_tx_details"
-        android:layout_width="0dp"
+        <import type="android.text.Html" />
+
+        <variable
+            name="txModel"
+            type="com.bailey.rod.cbaexercise.view.TxListAdapter.TxTransactionListItemModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintLeft_toRightOf="@+id/iv_tx_atm"
-        app:layout_constraintRight_toLeftOf="@+id/tv_tx_amount"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="Twas brillig and the slithy tove did gyre and gymble in the wabe." />
+        android:background="?android:selectableItemBackground"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="16dp">
 
-    <!-- Dollar amount of the transaction -->
+        <!-- ATM icon only appears for transactions conducted at an ATM -->
 
-    <TextView
-        android:id="@id/tv_tx_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_tx_details"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$300.00" />
+        <ImageView
+            android:id="@+id/iv_tx_atm"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="ATM icon"
+            android:paddingEnd="8dp"
+            android:src="@drawable/marker_atm_commbank"
+            android:visibility="@{txModel.isAtm() ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Textual description of the transaction -->
+
+        <TextView
+            android:id="@+id/tv_tx_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text='@{Html.fromHtml(txModel.pending ? "&lt;b>PENDING:&lt;/b> " + txModel.description : txModel.description, Html.FROM_HTML_MODE_LEGACY)}'
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/iv_tx_atm"
+            app:layout_constraintRight_toLeftOf="@+id/tv_tx_amount"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Twas brillig and the slithy tove did gyre and gymble in the wabe." />
+
+        <!-- Dollar amount of the transaction -->
+
+        <TextView
+            android:id="@id/tv_tx_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="@{FloatExtensionsKt.getDollarString(txModel.amount)}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_tx_details"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="$300.00" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
