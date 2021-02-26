@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/cba_date_header_bg"
-    android:padding="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Date of transactions in this section eg. "02 JAN 2014" -->
+    <data>
+        <variable
+            name="dateHeadingModel"
+            type="com.bailey.rod.cbaexercise.view.AccountOverviewListAdapter.TxDateHeadingListItemModel" />
 
-    <TextView
-        android:id="@+id/tv_tx_date"
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textAlignment="textStart"
-        android:textAllCaps="true"
-        android:textColor="@color/cba_normal_text"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="07 Jan 2014" />
+        android:background="@color/cba_date_header_bg"
+        android:padding="8dp">
 
-    <!-- Age of transactions in this section eg. "3 days ago" -->
+        <!-- Date of transactions in this section eg. "02 JAN 2014" -->
 
-    <TextView
-        android:id="@+id/tv_tx_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textAlignment="textEnd"
-        android:textColor="@color/cba_normal_text"
-        android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="3 days ago" />
+        <TextView
+            android:id="@+id/tv_tx_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textAlignment="textStart"
+            android:textAllCaps="true"
+            android:textColor="@color/cba_normal_text"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{dateHeadingModel.date}"
+            tools:text="07 Jan 2014" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Age of transactions in this section eg. "3 days ago" -->
+
+        <TextView
+            android:id="@+id/tv_tx_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textAlignment="textEnd"
+            android:textColor="@color/cba_normal_text"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{dateHeadingModel.daysAgo}"
+            tools:text="3 days ago" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

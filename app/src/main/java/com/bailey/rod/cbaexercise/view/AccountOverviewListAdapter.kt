@@ -1,9 +1,7 @@
 package com.bailey.rod.cbaexercise.view
 
 import android.content.Context
-import android.text.Html
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +12,15 @@ import com.bailey.rod.cbaexercise.databinding.TxListItemDateViewBinding
 import com.bailey.rod.cbaexercise.databinding.TxListItemHeaderViewBinding
 import com.bailey.rod.cbaexercise.databinding.TxListItemTxViewBinding
 import com.bailey.rod.cbaexercise.ext.daysAgoLabel
-import com.bailey.rod.cbaexercise.ext.getDollarString
 import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TxListAdapter(
+class AccountOverviewListAdapter(
     private val context: Context,
     private val accountSummary: XAccountOverview
 ) :
-    RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
+    RecyclerView.Adapter<AccountOverviewListAdapter.TxViewHolder>() {
 
     private val listItemModels: List<TxListItemModel> = createListItemModels()
 
@@ -102,7 +99,10 @@ class TxListAdapter(
                 )
             }
             is TxTransactionViewHolder -> {
-                bindTxViewHolder(holder, listItemModels[position] as TxTransactionListItemModel)
+                bindTxViewHolder(
+                    holder,
+                    listItemModels[position] as TxTransactionListItemModel
+                )
             }
             is TxDateHeadingViewHolder -> {
                 bindDateHeadingViewHolder(
@@ -113,12 +113,19 @@ class TxListAdapter(
         }
     }
 
+    private fun bindAccountHeadingViewHolder(
+        holder: TxAccountHeadingViewHolder,
+        model: TxAccountHeadingListItemModel
+    ) {
+        holder.binding.accountHeadingModel = model
+        holder.binding.root.setOnClickListener(null)
+    }
+
     private fun bindDateHeadingViewHolder(
         holder: TxDateHeadingViewHolder,
         model: TxDateHeadingListItemModel
     ) {
-        holder.binding.tvTxDate.text = model.date
-        holder.binding.tvTxAge.text = model.daysAgo
+        holder.binding.dateHeadingModel = model
         holder.binding.root.setOnClickListener(null)
     }
 
@@ -126,15 +133,10 @@ class TxListAdapter(
         holder: TxTransactionViewHolder,
         model: TxTransactionListItemModel
     ) {
-        holder.binding.tvTxDetails.text = Html.fromHtml(
-            if (model.isPending) "<b>PENDING:</b> ${model.description}" else model.description,
-            Html.FROM_HTML_MODE_LEGACY
-        )
-        holder.binding.tvTxAmount.text = model.amount?.getDollarString()
+        holder.binding.txModel = model
 
         if (model.isAtm == true) {
-            holder.binding.ivTxAtm.visibility = View.VISIBLE
-            holder.binding.root.setOnClickListener() {
+            holder.binding.root.setOnClickListener {
                 if (model.atmId != null) {
                     val atmData = findAtmById(model.atmId)
                     if (atmData != null) {
@@ -145,20 +147,8 @@ class TxListAdapter(
                 }
             }
         } else {
-            holder.binding.ivTxAtm.visibility = View.GONE
             holder.binding.root.setOnClickListener(null)
         }
-    }
-
-    private fun bindAccountHeadingViewHolder(
-        holder: TxAccountHeadingViewHolder,
-        model: TxAccountHeadingListItemModel
-    ) {
-        holder.binding.tvAccountName.text = model.accountName
-        holder.binding.tvAccountNumber.text = model.accountNumber
-        holder.binding.tvAvailableFundsValue.text = model.availableFunds?.getDollarString()
-        holder.binding.tvAccountBalanceValue.text = model.accountBalance?.getDollarString()
-        holder.binding.root.setOnClickListener(null)
     }
 
     override fun getItemCount(): Int {

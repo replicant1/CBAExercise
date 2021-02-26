@@ -15,7 +15,6 @@ import com.bailey.rod.cbaexercise.db.DbAccountOverview
 import com.bailey.rod.cbaexercise.net.google.Resource
 import com.bailey.rod.cbaexercise.net.google.Status
 import com.bailey.rod.cbaexercise.viewmodel.AccountOverviewViewModel
-import com.google.gson.Gson
 import timber.log.Timber
 
 /**
@@ -56,8 +55,7 @@ class AccountOverviewFragment : Fragment() {
             when (resource.status) {
                 Status.SUCCESS -> {
                     Timber.d("Trying to parse this JSON: ${resource.data?.overviewJson}")
-                    val overview =
-                        Gson().fromJson(resource.data?.overviewJson, XAccountOverview::class.java)
+                    val overview = XAccountOverview.parse(resource.data?.overviewJson ?: "")
                     handleFetchSuccess(overview)
                     binding.txSwipeRefresh.isRefreshing = false
                 }
@@ -79,7 +77,7 @@ class AccountOverviewFragment : Fragment() {
             val linearLayoutManager = LinearLayoutManager(context)
 
             binding.rvTxList.layoutManager = linearLayoutManager
-            binding.rvTxList.adapter = TxListAdapter(requireContext(), overview)
+            binding.txListAdapter = AccountOverviewListAdapter(requireContext(), overview)
 
             val posToRestore = viewModel.firstVisibleItemPosition.value
             val currentPos = linearLayoutManager.findFirstVisibleItemPosition()

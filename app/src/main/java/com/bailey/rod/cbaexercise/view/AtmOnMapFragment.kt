@@ -34,7 +34,6 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         arguments?.let {
             atmData = AtmOnMapFragmentArgs.fromBundle(it).atmJson
-            Timber.d("Retrieved atmJson arg = ${atmData}")
         }
     }
 
@@ -42,8 +41,6 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Timber.i("*** Into AtmOnMapFragment.onCreateView ***")
-
         binding = FragmentAtmOnMapBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this).get(AtmOnMapViewModel::class.java)
 
@@ -77,14 +74,12 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        Timber.i("-- Into onMapReady with googleMap = ${googleMap} --")
         mMap = googleMap
         setupGoogleMap()
         applyStateDataToMap()
     }
 
     private fun setupGoogleMap() {
-        Timber.i("-- Into setupGoogleMap --")
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = false
         mMap.uiSettings.isCompassEnabled = false
@@ -100,7 +95,6 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
      * Apply this.mState to this.mMap, if both are non-null
      */
     private fun applyStateDataToMap() {
-        Timber.i("-- Into applyStateDataToMap --")
         val safeState = viewModel.state.value
         val safeAtm = viewModel.state.value?.atm
 
@@ -144,11 +138,6 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
         mMap.setOnCameraMoveListener {
             val cameraPos = mMap.cameraPosition
 
-            println("Into onCameraMoveListener")
-            println("latitude= ${mMap.cameraPosition.target.latitude}")
-            println("longitude = ${mMap.cameraPosition.target.longitude}")
-            println("zoom = ${mMap.cameraPosition.zoom}")
-
             // Only latitude, longitude and zoom changes are notified
             val newState = AtmOnMapViewModelState(
                 cameraPos.zoom,
@@ -157,11 +146,8 @@ class AtmOnMapFragment : Fragment(), OnMapReadyCallback {
                 viewModel.state.value?.atmInfoWindowShowing,
                 viewModel.state.value?.atm
             )
-            Timber.d("newState = $newState")
             viewModel.state.value = newState
         }
-
-
     }
 
 }
