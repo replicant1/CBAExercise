@@ -9,7 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.bailey.rod.cbaexercise.view.MainHostActivity
-import com.bailey.rod.cbaexercise.view.TxListAdapter
+import com.bailey.rod.cbaexercise.view.AccountOverviewListAdapter
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.startsWith
 import org.junit.Assert.assertEquals
@@ -95,7 +95,7 @@ class AccountOverviewActivityInstrumentedTest {
     fun secondLastRowContainsLastDateHeader() {
         onView(withId(R.id.rv_tx_list))
             .check(matches(isDisplayed())).perform(
-                RecyclerViewActions.scrollTo<TxListAdapter.TxViewHolder>(
+                RecyclerViewActions.scrollTo<AccountOverviewListAdapter.TxViewHolder>(
                     hasDescendant(withText("17 MAY 2017"))
                 )
             )
@@ -109,7 +109,7 @@ class AccountOverviewActivityInstrumentedTest {
     fun lastRowContainsPendingTx() {
         onView(withId(R.id.rv_tx_list))
             .check(matches(isDisplayed())).perform(
-                RecyclerViewActions.scrollTo<TxListAdapter.TxViewHolder>(
+                RecyclerViewActions.scrollTo<AccountOverviewListAdapter.TxViewHolder>(
                     hasDescendant(withText(containsString("$-8.00")))
                 )
             )

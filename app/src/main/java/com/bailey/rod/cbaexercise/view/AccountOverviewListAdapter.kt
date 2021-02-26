@@ -16,11 +16,11 @@ import com.google.gson.Gson
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TxListAdapter(
+class AccountOverviewListAdapter(
     private val context: Context,
     private val accountSummary: XAccountOverview
 ) :
-    RecyclerView.Adapter<TxListAdapter.TxViewHolder>() {
+    RecyclerView.Adapter<AccountOverviewListAdapter.TxViewHolder>() {
 
     private val listItemModels: List<TxListItemModel> = createListItemModels()
 

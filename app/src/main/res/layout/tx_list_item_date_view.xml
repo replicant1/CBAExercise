@@ -6,7 +6,7 @@
     <data>
         <variable
             name="dateHeadingModel"
-            type="com.bailey.rod.cbaexercise.view.TxListAdapter.TxDateHeadingListItemModel" />
+            type="com.bailey.rod.cbaexercise.view.AccountOverviewListAdapter.TxDateHeadingListItemModel" />
 
     </data>
 

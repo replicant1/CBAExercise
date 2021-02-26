@@ -13,7 +13,7 @@
 
         <variable
             name="txModel"
-            type="com.bailey.rod.cbaexercise.view.TxListAdapter.TxTransactionListItemModel" />
+            type="com.bailey.rod.cbaexercise.view.AccountOverviewListAdapter.TxTransactionListItemModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

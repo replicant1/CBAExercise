@@ -7,7 +7,7 @@
         <import type="com.bailey.rod.cbaexercise.ext.FloatExtensionsKt"/>
         <variable
             name="accountHeadingModel"
-            type="com.bailey.rod.cbaexercise.view.TxListAdapter.TxAccountHeadingListItemModel" />
+            type="com.bailey.rod.cbaexercise.view.AccountOverviewListAdapter.TxAccountHeadingListItemModel" />
 
     </data>
 
